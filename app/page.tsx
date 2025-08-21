@@ -15,23 +15,23 @@ export default function Home() {
       "data science.",
       "accessible computing.",
     ];
-    
+
     // Get the appropriate phrase based on screen size
     const getAppropriatePhrase = (index: number): string => {
       const isMobile = window.innerWidth < 640;
       const phrase = fullPhrases[index];
-      
+
       // For mobile screens, shorten longer phrases to prevent overflow
       if (isMobile && phrase.length > 15) {
         // Map long phrases to shorter versions for mobile
         const shortPhrases: Record<string, string> = {
           "software engineering.": "coding.",
           "artificial intelligence.": "AI.",
-          "accessible computing.": "accessibility."
+          "accessible computing.": "accessibility.",
         };
         return shortPhrases[phrase] || phrase;
       }
-      
+
       return phrase;
     };
 
@@ -100,9 +100,9 @@ export default function Home() {
 
       {/* Personal Description */}
       <section>
-        <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
+        <div className="flex flex-col md:flex-row items-stretch justify-center gap-8 md:gap-12">
           {/* Left: Profile Icon Placeholder */}
-          <div className="relative group">
+          <div className="relative group self-center md:self-center">
             <div className="absolute -inset-1 bg-gradient-to-r from-[#2774AE] to-[#FFD100] rounded-full opacity-50 blur-md group-hover:opacity-100 transition-all duration-500"></div>
             <div className="flex flex-col items-center justify-center w-48 h-48 md:w-56 md:h-56 bg-white rounded-full relative border border-gray-50 shadow-md overflow-hidden">
               {/* Profile Image */}
@@ -117,16 +117,20 @@ export default function Home() {
             </div>
           </div>
           {/* Divider - Only visible on md screens and up */}
-          <div className="hidden md:block w-px h-56 bg-gradient-to-b from-transparent via-[#2774AE] to-transparent" />
+          <div className="hidden md:flex w-[2px] bg-gradient-to-b from-transparent via-[#2774AE] to-transparent opacity-80 self-stretch" />
           {/* Right: Personal Description Placeholder */}
           <div className="flex-1 flex items-center justify-center">
             <div className="flex flex-col items-center justify-center w-full">
               <p className="text-lg md:text-xl text-gray-700 text-center mb-5 md:mb-7 leading-relaxed px-2">
-                {/* Write your personal description here */}
                 Hi! I&apos;m Ethan, a computer engineering student @ UCLA. By
                 exploring the intersection of technology and society, I aim to
                 develop creative and impactful solutions that improve lives and
                 tackle real-world challenges.
+                <br />
+                <br />
+                In my free time, I enjoy playing basketball and badminton, reading, and
+                watching movies. Feel free to reach out, whether it's about
+                opportunities, collaboration, or just to connect!
               </p>
               {/* Social Links */}
               <div className="flex flex-wrap justify-center gap-4 md:gap-8 mt-4">
@@ -186,7 +190,9 @@ export default function Home() {
         <div className="bg-white/50 backdrop-blur-sm px-4 sm:px-8 py-4 rounded-xl shadow-sm border border-gray-50 text-center">
           <div className="typewriter-container">
             <div className="w-full md:w-auto">
-              <span className="text-xl md:text-3xl font-medium text-gray-700">I am passionate about </span>
+              <span className="text-xl md:text-3xl font-medium text-gray-700">
+                I am passionate about{" "}
+              </span>
             </div>
             <div className="inline-block">
               <span className="text-xl md:text-3xl font-bold bg-gradient-to-r from-[#2774AE] via-[#1384CB] to-[#FFD100] bg-clip-text text-transparent typewriter-text"></span>
@@ -347,9 +353,9 @@ export default function Home() {
                   Cartelligence
                 </h3>
                 <p className="text-sm md:text-base text-gray-600 mt-2 md:mt-3 mb-3 md:mb-4 max-w-md">
-                  Powered by Google&apos;s Gemini LLM, this web application improves
-                  the grocery shopping experience by offering the following
-                  features:
+                  Powered by Google&apos;s Gemini LLM, this web application
+                  improves the grocery shopping experience by offering the
+                  following features:
                 </p>
                 <ul className="space-y-2 md:space-y-3 mb-4 text-left">
                   {[
