@@ -94,7 +94,7 @@ export default function Home() {
           Ethan Jin
         </h1>
         <p className="text-lg md:text-xl text-gray-600 text-center font-light tracking-wide">
-          Welcome to my personal website!
+          Welcome to my website!
         </p>
       </section>
 
@@ -123,7 +123,7 @@ export default function Home() {
             <div className="flex flex-col items-center justify-center w-full">
               <p className="text-lg md:text-xl text-gray-700 text-center mb-5 md:mb-7 leading-relaxed px-2">
                 {/* Write your personal description here */}
-                Hi! I'm Ethan, a computer engineering student @ UCLA. By
+                Hi! I&apos;m Ethan, a computer engineering student @ UCLA. By
                 exploring the intersection of technology and society, I aim to
                 develop creative and impactful solutions that improve lives and
                 tackle real-world challenges.
@@ -347,7 +347,7 @@ export default function Home() {
                   Cartelligence
                 </h3>
                 <p className="text-sm md:text-base text-gray-600 mt-2 md:mt-3 mb-3 md:mb-4 max-w-md">
-                  Powered by Google's Gemini LLM, this web application improves
+                  Powered by Google&apos;s Gemini LLM, this web application improves
                   the grocery shopping experience by offering the following
                   features:
                 </p>
