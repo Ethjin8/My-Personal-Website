@@ -129,7 +129,7 @@ export default function Home() {
                 <br />
                 <br />
                 In my free time, I enjoy playing basketball and badminton, reading, and
-                watching movies. Feel free to reach out, whether it's about
+                watching movies. Feel free to reach out, whether it&apos;s about
                 opportunities, collaboration, or just to connect!
               </p>
               {/* Social Links */}
