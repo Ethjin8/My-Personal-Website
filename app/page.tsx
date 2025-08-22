@@ -124,7 +124,7 @@ export default function Home() {
               <p className="text-lg md:text-xl text-gray-700 text-center mb-5 md:mb-7 leading-relaxed px-2">
                 Hi! I&apos;m Ethan, a computer engineering student @ UCLA. By
                 exploring the intersection of technology and society, I aim to
-                develop creative and impactful solutions that improve lives and
+                develop creative and impactful projects that improve lives and
                 tackle real-world challenges.
                 <br />
                 <br />
@@ -237,10 +237,10 @@ export default function Home() {
             </div>
             <ul className="space-y-2 md:space-y-3">
               <li className="flex items-start">
-                <span className="inline-flex items-center justify-center w-4 h-4 md:w-5 md:h-5 bg-blue-100 rounded-full mr-2 md:mr-3 flex-shrink-0">
-                  <span className="w-1 h-1 md:w-1.5 md:h-1.5 bg-[#2774AE] rounded-full"></span>
+                <span className="inline-flex items-center justify-center w-5 h-5 bg-blue-100 rounded-full mr-3 flex-shrink-0">
+                  <span className="w-1.5 h-1.5 bg-[#2774AE] rounded-full"></span>
                 </span>
-                <span className="text-sm md:text-base text-gray-700">
+                <span className="text-gray-700">
                   Developed Python scripts to process and visualize 158+ system
                   dependency files, enabling automation of software package
                   installation workflows
@@ -366,10 +366,10 @@ export default function Home() {
                     "Detailed nutritional insights",
                   ].map((feature, index) => (
                     <li key={index} className="flex items-start">
-                      <span className="inline-flex items-center justify-center w-4 h-4 md:w-5 md:h-5 bg-blue-100 rounded-full mr-2 md:mr-3 flex-shrink-0">
-                        <span className="w-1 h-1 md:w-1.5 md:h-1.5 bg-[#2774AE] rounded-full"></span>
+                      <span className="inline-flex items-center justify-center w-5 h-5 bg-blue-100 rounded-full mr-3 flex-shrink-0">
+                        <span className="w-1.5 h-1.5 bg-[#2774AE] rounded-full"></span>
                       </span>
-                      <span className="text-sm md:text-base text-gray-700">
+                      <span className="text-gray-700">
                         {feature}
                       </span>
                     </li>
