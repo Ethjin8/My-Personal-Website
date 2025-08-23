@@ -355,7 +355,7 @@ export default function Home() {
                   AI Resume Critiquer
                 </h3>
                 <p className="text-sm md:text-base text-gray-600 mt-2 md:mt-3 mb-3 md:mb-4 max-w-md">
-                  A web application that leverages Meta's open-source LLM,
+                  A web application that leverages Meta&apos;s open-source LLM,
                   Llama, to provide constructive feedback for resumes. Outputs
                   can be customized for specific job descriptions, creativity level,
                   response length, and depth of analysis.
