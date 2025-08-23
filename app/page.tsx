@@ -128,9 +128,10 @@ export default function Home() {
                 tackle real-world challenges.
                 <br />
                 <br />
-                In my free time, I enjoy playing basketball and badminton, reading, and
-                watching movies. Feel free to reach out, whether it&apos;s about
-                opportunities, collaboration, or just to connect!
+                In my free time, I enjoy playing basketball and badminton,
+                reading, and watching movies. Feel free to reach out, whether
+                it&apos;s about opportunities, collaboration, or just to
+                connect!
               </p>
               {/* Social Links */}
               <div className="flex flex-wrap justify-center gap-4 md:gap-8 mt-4">
@@ -344,7 +345,70 @@ export default function Home() {
         <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-[#2774AE] to-[#FFD100] bg-clip-text text-transparent">
           Projects
         </h2>
+
         <div className="grid gap-6 md:gap-8">
+          <div className="card-hover group p-6 md:p-8 bg-white border border-gray-50 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300">
+            <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-center">
+              {/* Project Content */}
+              <div className="flex flex-col flex-1 justify-center items-center text-center">
+                <h3 className="text-xl md:text-2xl font-semibold text-gray-900 group-hover:text-[#2774AE] transition-colors duration-300">
+                  AI Resume Critiquer
+                </h3>
+                <p className="text-sm md:text-base text-gray-600 mt-2 md:mt-3 mb-3 md:mb-4 max-w-md">
+                  A web application that leverages Meta's open-source LLM,
+                  Llama, to provide constructive feedback for resumes. Outputs
+                  can be customized for specific job descriptions, creativity level,
+                  response length, and depth of analysis.
+                </p>
+
+                {/* Technology Tags */}
+                <div className="flex flex-wrap gap-2 mb-4 justify-center">
+                  {["Ollama", "Streamlit", "Python"].map((tech, index) => (
+                    <span
+                      key={index}
+                      className="px-3 py-1 bg-blue-50 text-[#2774AE] rounded-full text-xs font-medium whitespace-nowrap"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+
+                <Link
+                  href="https://github.com/Ethjin8/AI-Resume-Critiquer"
+                  target="_blank"
+                  className="inline-flex items-center text-[#2774AE] hover:text-[#FFD100] font-medium text-sm md:text-base transition-colors duration-300"
+                >
+                  <span>View Project</span>
+                  <svg
+                    className="ml-1.5 md:ml-2 w-4 h-4 md:w-5 md:h-5 transform group-hover:translate-x-1 transition-transform duration-300"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 7l5 5m0 0l-5 5m5-5H6"
+                    />
+                  </svg>
+                </Link>
+              </div>
+
+              {/* Project Image Area */}
+              <div className="w-full md:w-2/5 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center p-2">
+                <Image
+                  src="/images/ai_resume_screenshot.png"
+                  alt="Cartelligence app screenshot"
+                  width={700}
+                  height={394}
+                  className="w-full h-auto object-contain"
+                  quality={100}
+                />
+              </div>
+            </div>
+          </div>
+
           <div className="card-hover group p-6 md:p-8 bg-white border border-gray-50 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300">
             <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-center">
               {/* Project Content */}
@@ -369,9 +433,7 @@ export default function Home() {
                       <span className="inline-flex items-center justify-center w-5 h-5 bg-blue-100 rounded-full mr-3 flex-shrink-0">
                         <span className="w-1.5 h-1.5 bg-[#2774AE] rounded-full"></span>
                       </span>
-                      <span className="text-gray-700">
-                        {feature}
-                      </span>
+                      <span className="text-gray-700">{feature}</span>
                     </li>
                   ))}
                 </ul>
