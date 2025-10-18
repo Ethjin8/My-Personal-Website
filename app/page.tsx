@@ -244,7 +244,15 @@ export default function Home() {
                 <span className="text-gray-700">
                   Developed Python scripts to process and visualize 158+ system
                   dependency files, enabling automation of software package
-                  installation workflows
+                  installation workflows{" "}
+                  <Link
+                    href="https://docs.google.com/presentation/d/1-1d2MG9vXZXKiK2H7ER2NWmSVbiMt40v/edit?slide=id.p1#slide=id.p1"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline inline-flex items-center text-[#2774AE] hover:text-[#FFD100] font-medium text-sm md:text-base transition-colors duration-300"
+                  >
+                    (project presentation)
+                  </Link>
                 </span>
               </li>
               <li className="flex items-start">
@@ -254,7 +262,15 @@ export default function Home() {
                 <span className="text-gray-700">
                   Generated Python dataframe structures using Pandas and pie
                   chart models from 63 module logs to detect usage patterns,
-                  increasing deployment efficiency
+                  increasing deployment efficiency {""}
+                  <Link
+                    href="https://docs.google.com/presentation/u/1/d/1SZSHN_lNp8_bxzvU3WAFB3IY7McgDpLM/edit?slide=id.p1#slide=id.p1"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline inline-flex items-center text-[#2774AE] hover:text-[#FFD100] font-medium text-sm md:text-base transition-colors duration-300"
+                  >
+                    (project poster)
+                  </Link>
                 </span>
               </li>
               <li className="flex items-start">
