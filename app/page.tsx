@@ -14,6 +14,8 @@ export default function Home() {
       "artificial intelligence.",
       "data science.",
       "accessible computing.",
+      "healthcare.",
+      "sustainability.",
     ];
 
     // Get the appropriate phrase based on screen size
@@ -124,8 +126,10 @@ export default function Home() {
               <p className="text-lg md:text-xl text-gray-700 text-center mb-5 md:mb-7 leading-relaxed px-2">
                 Hi! I&apos;m Ethan, a computer engineering student @ UCLA. By
                 exploring the intersection of technology and society, I aim to
-                develop creative and impactful projects that improve lives and
-                tackle real-world challenges.
+                develop creative projects that improve lives and tackle
+                real-world challenges. I&apos;m particularly interested in AI/ML
+                and its applications in sustainability, healthcare, and
+                accessibility.
                 <br />
                 <br />
                 In my free time, I enjoy playing basketball and badminton,
@@ -213,6 +217,97 @@ export default function Home() {
               {/* Logo */}
               <div className="flex-shrink-0 flex items-center justify-center">
                 <Image
+                  src="/images/mdd-lab-logo.png"
+                  alt="ACM UCLA logo"
+                  width={90}
+                  height={90}
+                  className="object-contain max-h-20 md:max-h-24 rounded border border-gray-200 p-1"
+                  style={{ background: "rgba(243, 244, 246, 0.5)" }}
+                />
+              </div>
+
+              <div className="flex flex-1 flex-wrap md:flex-nowrap justify-between items-start">
+                <div>
+                  <h3 className="text-lg md:text-xl font-semibold text-gray-900 hover:text-[#2774AE] transition-colors duration-300">
+                    Materials Design Through Dynamics Lab
+                  </h3>
+                  <p className="text-[#2774AE] font-medium mt-1">
+                    Undergraduate Researcher
+                  </p>
+                </div>
+                <span className="px-2 py-1 md:px-3 md:py-1 bg-blue-50 text-[#2774AE] rounded-full text-xs md:text-sm font-medium whitespace-nowrap mt-2 md:mt-0">
+                  November 2025 - Present
+                </span>
+              </div>
+            </div>
+            <ul className="space-y-2 md:space-y-3">
+              <li className="flex items-start">
+                <span className="inline-flex items-center justify-center w-5 h-5 bg-blue-100 rounded-full mr-3 flex-shrink-0">
+                  <span className="w-1.5 h-1.5 bg-[#2774AE] rounded-full"></span>
+                </span>
+                <span className="text-gray-700">
+                  Conducting research under Professor Szymanski to design and
+                  implement a user-friendly web interface for ML-assisted powder
+                  X-ray diffraction analysis
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="card-hover p-6 md:p-8 bg-white border border-gray-50 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300">
+            <div className="flex flex-wrap md:flex-nowrap gap-4 md:gap-6 mb-4">
+              {/* Logo */}
+              <div className="flex-shrink-0 flex items-center justify-center">
+                <Image
+                  src="/images/acm-logo.png"
+                  alt="ACM UCLA logo"
+                  width={65}
+                  height={65}
+                  className="object-contain max-h-20 md:max-h-24 rounded border border-gray-200 p-1"
+                  style={{ background: "rgba(243, 244, 246, 0.5)" }}
+                />
+              </div>
+
+              <div className="flex flex-1 flex-wrap md:flex-nowrap justify-between items-start">
+                <div>
+                  <h3 className="text-lg md:text-xl font-semibold text-gray-900 hover:text-[#2774AE] transition-colors duration-300">
+                    Association of Computing Machinery @ UCLA
+                  </h3>
+                  <p className="text-[#2774AE] font-medium mt-1">
+                    Development Team Intern
+                  </p>
+                </div>
+                <span className="px-2 py-1 md:px-3 md:py-1 bg-blue-50 text-[#2774AE] rounded-full text-xs md:text-sm font-medium whitespace-nowrap mt-2 md:mt-0">
+                  October 2025 - Present
+                </span>
+              </div>
+            </div>
+            <ul className="space-y-2 md:space-y-3">
+              <li className="flex items-start">
+                <span className="inline-flex items-center justify-center w-5 h-5 bg-blue-100 rounded-full mr-3 flex-shrink-0">
+                  <span className="w-1.5 h-1.5 bg-[#2774AE] rounded-full"></span>
+                </span>
+                <span className="text-gray-700">
+                  Full-stack development with a focus on backend to support
+                  ACM’s web services (membership portal, main website)
+                </span>
+              </li>
+              <li className="flex items-start">
+                <span className="inline-flex items-center justify-center w-5 h-5 bg-blue-100 rounded-full mr-3 flex-shrink-0">
+                  <span className="w-1.5 h-1.5 bg-[#2774AE] rounded-full"></span>
+                </span>
+                <span className="text-gray-700">
+                  Building with Git, React, Next.js, Tailwind, AWS, MongoDB
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="card-hover p-6 md:p-8 bg-white border border-gray-50 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300">
+            <div className="flex flex-wrap md:flex-nowrap gap-4 md:gap-6 mb-4">
+              {/* Logo */}
+              <div className="flex-shrink-0 flex items-center justify-center">
+                <Image
                   src="/images/rehs_logo.png"
                   alt="UCSD REHS logo"
                   width={90}
@@ -260,8 +355,9 @@ export default function Home() {
                   <span className="w-1.5 h-1.5 bg-[#2774AE] rounded-full"></span>
                 </span>
                 <span className="text-gray-700">
-                  Generated Python dataframe structures using Pandas and pie
-                  chart models from 63 module logs to detect usage patterns,
+                  Created command-line interface tool that generated Python
+                  Pandas dataframe structures and pie chart models from 63
+                  module logs to analyze software usage patterns within Expanse,
                   increasing deployment efficiency {""}
                   <Link
                     href="https://docs.google.com/presentation/u/1/d/1SZSHN_lNp8_bxzvU3WAFB3IY7McgDpLM/edit?slide=id.p1#slide=id.p1"
@@ -373,8 +469,8 @@ export default function Home() {
                 <p className="text-sm md:text-base text-gray-600 mt-2 md:mt-3 mb-3 md:mb-4 max-w-md">
                   A web application that leverages Meta&apos;s open-source LLM,
                   Llama, to provide constructive feedback for resumes. Outputs
-                  can be customized for specific job descriptions, creativity level,
-                  response length, and depth of analysis.
+                  can be customized for specific job descriptions, creativity
+                  level, response length, and depth of analysis.
                 </p>
 
                 {/* Technology Tags */}
