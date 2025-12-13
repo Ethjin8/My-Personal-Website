@@ -246,9 +246,20 @@ export default function Home() {
                   <span className="w-1.5 h-1.5 bg-[#2774AE] rounded-full"></span>
                 </span>
                 <span className="text-gray-700">
-                  Conducting research under Professor Szymanski to design and
-                  implement a user-friendly web interface for ML-assisted powder
-                  X-ray diffraction analysis
+                  Building a web platform enabling rapid X-ray diffraction phase
+                  identification, reducing manual analysis time from hours to
+                  minutes
+                </span>
+              </li>
+              <li className="flex items-start">
+                <span className="inline-flex items-center justify-center w-5 h-5 bg-blue-100 rounded-full mr-3 flex-shrink-0">
+                  <span className="w-1.5 h-1.5 bg-[#2774AE] rounded-full"></span>
+                </span>
+                <span className="text-gray-700">
+                  Integrating 18,000 pretrained phase-specific neural network
+                  models, designing a backend system that dynamically loads only
+                  the few hundred relevant models needed per query to enable
+                  efficient GPU-accelerated inference
                 </span>
               </li>
             </ul>
@@ -288,8 +299,7 @@ export default function Home() {
                   <span className="w-1.5 h-1.5 bg-[#2774AE] rounded-full"></span>
                 </span>
                 <span className="text-gray-700">
-                  Full-stack development with a focus on backend to support
-                  ACM’s web services (membership portal, main website)
+                  Full-stack development to support ACM’s web services (membership portal, main website) for over 3500+ general members and event attendees
                 </span>
               </li>
               <li className="flex items-start">
@@ -297,7 +307,7 @@ export default function Home() {
                   <span className="w-1.5 h-1.5 bg-[#2774AE] rounded-full"></span>
                 </span>
                 <span className="text-gray-700">
-                  Building with Git, React, Next.js, Tailwind, AWS, MongoDB
+                  Integrating a new PostgreSQL database with membership portal to process over 400+ intern applications
                 </span>
               </li>
             </ul>
