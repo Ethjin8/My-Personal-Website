@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Playfair_Display, Lora } from "next/font/google";
+import Navbar from "./components/navbar";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -76,6 +77,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             }}
           />
         </div>
+        <Navbar />
         <main className="min-h-screen relative z-0">{children}</main>
       </body>
     </html>
