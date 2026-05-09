@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 interface SportsCardProps {
   sport: "basketball" | "badminton";
 }
@@ -7,11 +5,11 @@ interface SportsCardProps {
 const sportConfig = {
   basketball: {
     label: "Basketball",
-    placeholder: "/images/placeholder-logo.png",
+    emoji: "🏀",
   },
   badminton: {
     label: "Badminton",
-    placeholder: "/images/placeholder-logo.png",
+    emoji: "🏸",
   },
 };
 
@@ -20,12 +18,12 @@ export default function SportsCard({ sport }: SportsCardProps) {
 
   return (
     <div className="relative h-full min-h-[160px] overflow-hidden rounded-[24px]">
-      <Image
-        src={config.placeholder}
-        alt={config.label}
-        fill
-        className="object-cover opacity-60"
-      />
+      <div
+        className="absolute inset-0 flex items-center justify-center text-6xl opacity-30"
+        style={{ backgroundColor: "var(--muted)" }}
+      >
+        {config.emoji}
+      </div>
       <div
         className="absolute inset-0"
         style={{
