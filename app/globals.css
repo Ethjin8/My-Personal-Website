@@ -235,7 +235,7 @@ body {
 /* Bento grid layout */
 .bento-grid {
   display: grid;
-  gap: 16px;
+  gap: 14px;
   padding-top: 5rem;
   padding-bottom: 4rem;
 
@@ -257,11 +257,12 @@ body {
 
 @media (min-width: 768px) {
   .bento-grid {
+    gap: 14px;
     grid-template-columns: 1fr 1fr;
     grid-template-areas:
       "header  header"
       "intro   photo"
-      "intro   type"
+      "type    photo"
       "tech    build"
       "bball   watch"
       "badm    listen"
@@ -271,15 +272,15 @@ body {
 
 @media (min-width: 1024px) {
   .bento-grid {
-    grid-template-columns: 1.2fr 0.8fr 1fr 1fr 0.8fr 1.2fr;
-    grid-template-rows: auto auto auto auto auto auto;
+    gap: 16px;
+    grid-template-columns: 1fr 1.2fr 1.6fr 1.2fr 1fr;
+    grid-template-rows: auto auto auto auto auto;
     grid-template-areas:
-      "bball   bball   header  header  watch   watch"
-      "intro   intro   photo   photo   watch   watch"
-      "intro   intro   photo   photo   type    type"
-      "tech    build   build   badm    badm    listen"
-      "github  build   build   badm    badm    listen"
-      "github  .       .       .       .       .";
+      "tech    intro   header  header  bball"
+      "tech    intro   photo   photo   watch"
+      "github  build   photo   photo   watch"
+      "github  type    type    listen  listen"
+      ".       badm    badm    .       .";
   }
 }
 

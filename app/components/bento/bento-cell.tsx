@@ -14,10 +14,10 @@ interface BentoCellProps {
 }
 
 const slideOffsets: Record<SlideDirection, { x: number; y: number }> = {
-  left: { x: -40, y: 0 },
-  right: { x: 40, y: 0 },
-  up: { x: 0, y: -40 },
-  down: { x: 0, y: 40 },
+  left: { x: -50, y: 0 },
+  right: { x: 50, y: 0 },
+  up: { x: 0, y: -50 },
+  down: { x: 0, y: 50 },
 };
 
 export default function BentoCell({
@@ -32,50 +32,44 @@ export default function BentoCell({
 
   if (isHero) {
     return (
-      <div
+      <motion.div
         data-area={area}
         className={`glass-card ${className}`}
         style={{ gridArea: area }}
+        initial={reducedMotion ? { opacity: 1 } : { opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{
+          type: "spring",
+          stiffness: 120,
+          damping: 18,
+          delay,
+        }}
       >
         {children}
-      </div>
+      </motion.div>
     );
   }
 
   const offset = slideOffsets[slideFrom];
 
   return (
-    <div style={{ gridArea: area }} className="relative">
-      {/* Ghost placeholder */}
-      <motion.div
-        className="ghost-placeholder absolute inset-0"
-        initial={{ opacity: 0.3 }}
-        whileInView={{ opacity: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.3 }}
-      />
-      {/* Actual cell content */}
-      <motion.div
-        className={`glass-card h-full ${className}`}
-        initial={
-          reducedMotion
-            ? { opacity: 1 }
-            : { opacity: 0, x: offset.x, y: offset.y }
-        }
-        whileInView={
-          reducedMotion ? { opacity: 1 } : { opacity: 1, x: 0, y: 0 }
-        }
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{
-          type: "spring",
-          stiffness: 100,
-          damping: 15,
-          duration: 0.5,
-          delay,
-        }}
-      >
-        {children}
-      </motion.div>
-    </div>
+    <motion.div
+      style={{ gridArea: area }}
+      className={`glass-card h-full ${className}`}
+      initial={
+        reducedMotion
+          ? { opacity: 1 }
+          : { opacity: 0, x: offset.x, y: offset.y }
+      }
+      animate={{ opacity: 1, x: 0, y: 0 }}
+      transition={{
+        type: "spring",
+        stiffness: 100,
+        damping: 15,
+        delay,
+      }}
+    >
+      {children}
+    </motion.div>
   );
 }
