@@ -238,6 +238,57 @@ body {
   font-family: var(--font-playfair), 'Georgia', serif;
 }
 
+/* Bento grid layout */
+.bento-grid {
+  display: grid;
+  gap: 16px;
+  padding-top: 5rem;
+  padding-bottom: 4rem;
+
+  /* Mobile: single column */
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "header"
+    "photo"
+    "intro"
+    "type"
+    "tech"
+    "build"
+    "bball"
+    "badm"
+    "watch"
+    "listen"
+    "github";
+}
+
+@media (min-width: 768px) {
+  .bento-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "header  header"
+      "intro   photo"
+      "intro   type"
+      "tech    build"
+      "bball   watch"
+      "badm    listen"
+      "github  github";
+  }
+}
+
+@media (min-width: 1024px) {
+  .bento-grid {
+    grid-template-columns: 1.2fr 0.8fr 1fr 1fr 0.8fr 1.2fr;
+    grid-template-rows: auto auto auto auto auto auto;
+    grid-template-areas:
+      "bball   bball   header  header  watch   watch"
+      "intro   intro   photo   photo   watch   watch"
+      "intro   intro   photo   photo   type    type"
+      "tech    build   build   badm    badm    listen"
+      "github  build   build   badm    badm    listen"
+      "github  .       .       .       .       .";
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .glow-orb {
     animation: none !important;
