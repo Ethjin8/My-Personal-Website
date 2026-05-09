@@ -158,12 +158,6 @@ body {
   50% { opacity: 0; }
 }
 
-@keyframes gradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
 /* Theme-aware hover utilities */
 .theme-link {
   color: var(--accent);
@@ -290,6 +284,12 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .glass-card {
+    transition: none !important;
+  }
+  .glass-card:hover {
+    transform: none !important;
+  }
   .glow-orb {
     animation: none !important;
   }
