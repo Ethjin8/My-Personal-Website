@@ -29,7 +29,7 @@ const experiences: Experience[] = [
     role: "Undergraduate Researcher",
     dates: "Nov. 2025 – Present",
     summary:
-      "Architecting a full-stack AI platform for substance identification — ~200x faster than manual lab methods, backed by 18,000 neural networks.",
+      "Architecting a full-stack AI platform for substance identification. ~200x faster than manual lab methods, backed by 18,000 neural networks.",
     bullets: [
       {
         text: "Architecting a full-stack AI analysis platform to identify unknown substance compositions **~200x faster** than manual lab methods",
@@ -53,7 +53,7 @@ const experiences: Experience[] = [
     role: "Software Engineer",
     dates: "Oct. 2025 – Present",
     summary:
-      "Maintaining web services for 3,500+ members — MongoDB migration, REST API development, and role-based auth.",
+      "Maintaining web services for 3,500+ users — MongoDB migration, REST API development, and role-based auth.",
     bullets: [
       {
         text: "Supporting a community of **3,500+ members & event attendees** by maintaining and optimizing the organization's primary website",
