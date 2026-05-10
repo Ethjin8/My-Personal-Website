@@ -1,105 +1,302 @@
 "use client";
 
 import { useState } from "react";
-import ProjectCard from "@/app/components/projects/project-card";
-import ProjectModal from "@/app/components/projects/project-modal";
+import Image from "next/image";
+import { FaGithub } from "react-icons/fa";
+import { SiDevpost } from "react-icons/si";
+import { FiExternalLink } from "react-icons/fi";
 
-const PROJECTS = [
+interface ProjectLink {
+  label: string;
+  href: string;
+  icon: "github" | "devpost" | "site";
+}
+
+interface Project {
+  name: string;
+  caption: string;
+  screenshot?: string;
+  imgWidth?: number;
+  imgHeight?: number;
+  description: string;
+  techStack: string[];
+  bullets: string[];
+  links: ProjectLink[];
+}
+
+const projects: Project[] = [
   {
-    id: "ai-resume",
-    title: "AI Resume Critiquer",
+    name: "Inner Circle",
+    caption: "Agentic relationship management system",
+    screenshot: "/images/projects/inner-circle.png",
+    imgWidth: 3022,
+    imgHeight: 1500,
     description:
-      "A web application that leverages Meta's open-source LLM, Llama, to provide constructive feedback for resumes. Outputs can be customized for specific job descriptions, creativity level, response length, and depth of analysis.",
-    shortBullets: [
-      "Leverages Meta's Llama LLM for intelligent resume feedback",
-      "Customizable for specific job descriptions and analysis depth",
-      "Adjustable creativity level and response length",
+      "An AI-powered relationship manager visualized as a constellation graph — store contacts as nodes, reach out via email and calendar automation.",
+    techStack: ["React", "Vite", "Firebase", "Voyage AI", "Claude API"],
+    bullets: [
+      "Constellation graph network for contact visualization and outreach automation",
+      "Custom LLM pipeline scoring relationship strength across 5 dimensions, under 2% error",
+      "RAG retrieval with Voyage AI embeddings, batching up to 128 nodes per API call",
+      "Change-aware caching cutting repeat retrieval latency from 273ms to 0.13ms",
     ],
-    techStack: ["Ollama", "Streamlit", "Python"],
-    screenshot: "/images/ai_resume_screenshot.png",
-    githubUrl: "https://github.com/Ethjin8/AI-Resume-Critiquer",
+    links: [
+      { label: "GitHub", href: "https://github.com/Ethjin8/Inner-Circle", icon: "github" },
+      { label: "Devpost", href: "https://devpost.com/software/inner-circle-tqavge", icon: "devpost" },
+    ],
   },
   {
-    id: "cartelligence",
-    title: "Cartelligence",
+    name: "LegalEase",
+    caption: "AI legal document assistant with voice",
+    screenshot: "/images/projects/legalease.png",
+    imgWidth: 3022,
+    imgHeight: 1500,
     description:
-      "Powered by Google's Gemini LLM, this web application improves the grocery shopping experience by offering grocery list creation, recipe generation, diet analysis, alternative ingredient finder, and detailed nutritional insights.",
-    shortBullets: [
-      "Powered by Google's Gemini LLM",
-      "Grocery list creation and recipe generation",
-      "Diet analysis and nutritional insights",
+      "A legal document assistant that explains content through real-time voice conversations and chat, supporting 42 languages and 3 reading levels.",
+    techStack: ["Next.js", "Tailwind", "Supabase", "Gemini Live"],
+    bullets: [
+      "Real-time voice and chat legal explanations across 42 languages and 3 reading levels",
+      "WebSocket connection to Gemini 3.1 Flash Live API with ephemeral tokens",
+      "Bidirectional audio pipeline with sub-20ms latency for gapless playback",
     ],
-    techStack: ["Flask", "Python", "Bootstrap", "SQLAlchemy"],
-    screenshot: "/images/cartelligence_screenshot.png",
-    githubUrl: "https://github.com/alephnull07/Cartelligence",
+    links: [
+      { label: "GitHub", href: "https://github.com/Ethjin8/LegalEase", icon: "github" },
+      { label: "Live Site", href: "https://trylegalease.vercel.app", icon: "site" },
+    ],
   },
   {
-    id: "classtime",
-    title: "ClassTime",
+    name: "Cartelligence",
+    caption: "AI-powered grocery shopping assistant",
+    screenshot: "/images/projects/cartelligence_screenshot.png",
+    imgWidth: 1637,
+    imgHeight: 1235,
     description:
-      "As a simple time-tracking app geared towards students, this mobile app is designed to bolster productivity by providing a comprehensive suite of tools for managing important assignments and various deadlines.",
-    shortBullets: [
-      "Time-tracking scheduler for student productivity",
-      "Comprehensive assignment and deadline management",
-      "Built with Flutter for cross-platform support",
+      "A full-stack grocery assistant powered by Google Gemini — personalized recipes, budget alternatives, and nutritional analysis.",
+    techStack: ["Flask", "Python", "Bootstrap", "SQLAlchemy", "Gemini"],
+    bullets: [
+      "Personalized recipe generation with 3–4 budget alternatives based on dietary restrictions",
+      "Nutrition analysis dashboard backed by SQLite with cascading list-item management",
     ],
+    links: [
+      { label: "GitHub", href: "https://github.com/alephnull07/Cartelligence", icon: "github" },
+    ],
+  },
+  {
+    name: "ClassTime",
+    caption: "Student productivity & time-tracking app",
+    screenshot: "/images/projects/classtime_screenshot.png",
+    imgWidth: 455,
+    imgHeight: 889,
+    description:
+      "A mobile app designed to bolster student productivity with comprehensive tools for managing assignments and deadlines.",
     techStack: ["Flutter", "Dart", "C++", "Firebase"],
-    screenshot: "/images/classtime_screenshot.png",
-    githubUrl: "https://github.com/Ethjin8/ClassTime",
+    bullets: [
+      "Schedule view with Today, Future, and Past sections plus quick-add",
+      "Assignment tracking with due dates, completion status, and search/filter",
+      "Real-time sync across devices via Firebase",
+    ],
+    links: [
+      { label: "GitHub", href: "https://github.com/Ethjin8/ClassTime", icon: "github" },
+    ],
   },
 ];
 
-type ProjectData = (typeof PROJECTS)[number];
-
-export default function ProjectsPage() {
-  const [selectedProject, setSelectedProject] = useState<ProjectData | null>(
-    null
+function BrowserMockup({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="w-full rounded-lg overflow-hidden shadow-md" style={{ backgroundColor: "#f0f0f0" }}>
+      <div className="flex items-center gap-1.5 px-3 py-2" style={{ backgroundColor: "#e0e0e0" }}>
+        <span className="w-[10px] h-[10px] rounded-full" style={{ backgroundColor: "#ff5f57" }} />
+        <span className="w-[10px] h-[10px] rounded-full" style={{ backgroundColor: "#febc2e" }} />
+        <span className="w-[10px] h-[10px] rounded-full" style={{ backgroundColor: "#28c840" }} />
+        <div className="flex-1 mx-2 rounded-sm py-0.5 px-2" style={{ backgroundColor: "#f7f7f7" }}>
+          <div className="w-12 h-1.5 rounded-full" style={{ backgroundColor: "#d0d0d0" }} />
+        </div>
+      </div>
+      <div className="overflow-hidden">{children}</div>
+    </div>
   );
+}
+
+function PhoneMockup({ children }: { children: React.ReactNode }) {
+  return (
+    <div
+      className="h-full aspect-[9/19] rounded-[24px] overflow-hidden shadow-md border-[3px] flex flex-col"
+      style={{ borderColor: "#2a2a2a", backgroundColor: "#1a1a1a" }}
+    >
+      <div className="flex justify-center py-1.5" style={{ backgroundColor: "#1a1a1a" }}>
+        <div className="w-16 h-[5px] rounded-full" style={{ backgroundColor: "#333" }} />
+      </div>
+      <div className="flex-1 overflow-hidden">{children}</div>
+    </div>
+  );
+}
+
+function LinkIcon({ type, size = 20 }: { type: ProjectLink["icon"]; size?: number }) {
+  switch (type) {
+    case "github":
+      return <FaGithub size={size} />;
+    case "devpost":
+      return <SiDevpost size={size} />;
+    case "site":
+      return <FiExternalLink size={size} />;
+  }
+}
+
+function ProjectCard({ project }: { project: Project }) {
+  const [flipped, setFlipped] = useState(false);
+  const hasImage = !!project.screenshot;
+  const isPortrait = hasImage && project.imgHeight! > project.imgWidth!;
 
   return (
-    <div className="max-w-6xl mx-auto px-6 md:px-8 lg:px-12 pt-24 pb-10">
-      <h1
-        className="font-heading text-3xl md:text-4xl font-bold mb-8 bg-clip-text text-transparent"
+    <div
+      className="group perspective-[1000px] h-[420px] sm:h-[480px] cursor-pointer"
+      onClick={() => setFlipped((f) => !f)}
+      onMouseEnter={() => setFlipped(true)}
+      onMouseLeave={() => setFlipped(false)}
+    >
+      <div
+        className="relative w-full h-full transition-transform duration-500 ease-out"
         style={{
-          backgroundImage: `linear-gradient(to right, var(--accent), var(--accent-gold))`,
+          transformStyle: "preserve-3d",
+          transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
         }}
+      >
+        {/* Front */}
+        <div
+          className="absolute inset-0 neu-raised rounded-2xl overflow-hidden flex flex-col"
+          style={{ backfaceVisibility: "hidden" }}
+        >
+          <div className="flex-1 m-3 mb-0 rounded-xl overflow-hidden neu-inset flex items-center justify-center p-4">
+            {hasImage && isPortrait ? (
+              <PhoneMockup>
+                <Image
+                  src={project.screenshot!}
+                  alt={project.name}
+                  width={project.imgWidth!}
+                  height={project.imgHeight!}
+                  className="w-full h-full object-cover object-top"
+                  sizes="200px"
+                />
+              </PhoneMockup>
+            ) : hasImage ? (
+              <BrowserMockup>
+                <Image
+                  src={project.screenshot!}
+                  alt={project.name}
+                  width={project.imgWidth!}
+                  height={project.imgHeight!}
+                  className="w-full h-auto"
+                  sizes="380px"
+                />
+              </BrowserMockup>
+            ) : null}
+          </div>
+          <div className="p-4 text-center">
+            <h3
+              className="text-lg font-bold"
+              style={{ color: "var(--text-primary)" }}
+            >
+              {project.name}
+            </h3>
+            <p
+              className="text-xs mt-1"
+              style={{ color: "var(--text-secondary)" }}
+            >
+              {project.caption}
+            </p>
+          </div>
+        </div>
+
+        {/* Back */}
+        <div
+          className="absolute inset-0 glass-card rounded-2xl p-6 flex flex-col items-center justify-between gap-6"
+          style={{
+            backfaceVisibility: "hidden",
+            transform: "rotateY(180deg)",
+          }}
+        >
+          {/* Section 1: Text */}
+          <div>
+            <h3
+              className="text-lg font-bold text-center mb-3"
+              style={{ color: "var(--ucla-blue)" }}
+            >
+              {project.name}
+            </h3>
+            <p
+              className="text-sm leading-relaxed mb-3"
+              style={{ color: "var(--text-primary)" }}
+            >
+              {project.description}
+            </p>
+            <ul className="flex flex-col gap-1.5">
+              {project.bullets.map((bullet, i) => (
+                <li key={i} className="flex items-start gap-2">
+                  <span
+                    className="mt-[6px] w-[5px] h-[5px] rounded-full shrink-0"
+                    style={{ backgroundColor: "var(--ucla-blue)" }}
+                  />
+                  <span
+                    className="text-xs leading-relaxed"
+                    style={{ color: "var(--text-primary)" }}
+                  >
+                    {bullet}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Section 2: Links */}
+          <div className="flex flex-wrap justify-center gap-3">
+            {project.links.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="glass-pill rounded-full px-5 py-2.5 flex items-center gap-2.5 hover:scale-[1.03] active:scale-[0.97] transition-transform"
+                style={{ color: "var(--ucla-blue)" }}
+              >
+                <LinkIcon type={link.icon} size={18} />
+                <span className="text-sm font-semibold">{link.label}</span>
+              </a>
+            ))}
+          </div>
+
+          {/* Section 3: Tech stack */}
+          <div className="flex flex-wrap justify-center gap-2">
+            {project.techStack.map((tech) => (
+              <span
+                key={tech}
+                className="glass-pill rounded-full px-3 py-1 text-xs font-medium"
+                style={{ color: "var(--ucla-blue)" }}
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function ProjectsPage() {
+  return (
+    <main className="max-w-[900px] mx-auto px-4 sm:px-6 pt-24 pb-16">
+      <h1
+        className="text-2xl sm:text-3xl font-display italic mb-8"
+        style={{ color: "var(--ucla-blue)" }}
       >
         Projects
       </h1>
 
-      {/* Asymmetric grid: featured large + smaller cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[minmax(280px,auto)]">
-        <div className="md:col-span-2 lg:col-span-2 lg:row-span-2">
-          <ProjectCard
-            data={PROJECTS[0]}
-            index={0}
-            onSelect={setSelectedProject}
-          />
-        </div>
-        {PROJECTS.slice(1).map((project, i) => (
-          <ProjectCard
-            key={project.id}
-            data={project}
-            index={i + 1}
-            onSelect={setSelectedProject}
-          />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {projects.map((project) => (
+          <ProjectCard key={project.name} project={project} />
         ))}
       </div>
-
-      <ProjectModal
-        project={selectedProject}
-        onClose={() => setSelectedProject(null)}
-      />
-
-      {/* Footer */}
-      <footer className="mt-16 pb-8">
-        <div
-          className="text-center text-xs md:text-sm"
-          style={{ color: "var(--muted-foreground)" }}
-        >
-          &copy; 2025 Ethan Jin. All Rights Reserved.
-        </div>
-      </footer>
-    </div>
+    </main>
   );
 }
