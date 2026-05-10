@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { FaGithub } from "react-icons/fa";
 import { SiDevpost } from "react-icons/si";
@@ -142,17 +142,30 @@ function LinkIcon({ type, size = 20 }: { type: ProjectLink["icon"]; size?: numbe
   }
 }
 
+function useCanHover() {
+  const [canHover, setCanHover] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: hover)");
+    setCanHover(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setCanHover(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+  return canHover;
+}
+
 function ProjectCard({ project }: { project: Project }) {
   const [flipped, setFlipped] = useState(false);
+  const canHover = useCanHover();
   const hasImage = !!project.screenshot;
   const isPortrait = hasImage && project.imgHeight! > project.imgWidth!;
 
   return (
     <div
       className="group perspective-[1000px] h-[420px] sm:h-[480px] cursor-pointer"
-      onClick={() => setFlipped((f) => !f)}
-      onMouseEnter={() => setFlipped(true)}
-      onMouseLeave={() => setFlipped(false)}
+      onClick={() => { if (!canHover) setFlipped((f) => !f); }}
+      onMouseEnter={() => { if (canHover) setFlipped(true); }}
+      onMouseLeave={() => { if (canHover) setFlipped(false); }}
     >
       <div
         className="relative w-full h-full transition-transform duration-500 ease-out"
@@ -209,35 +222,35 @@ function ProjectCard({ project }: { project: Project }) {
 
         {/* Back */}
         <div
-          className="absolute inset-0 glass-card rounded-2xl p-6 flex flex-col items-center justify-between gap-6"
+          className="absolute inset-0 glass-card rounded-2xl p-4 sm:p-6 flex flex-col items-center justify-between gap-3 sm:gap-6 overflow-hidden"
           style={{
             backfaceVisibility: "hidden",
             transform: "rotateY(180deg)",
           }}
         >
           {/* Section 1: Text */}
-          <div>
+          <div className="min-h-0 overflow-y-auto">
             <h3
-              className="text-lg font-bold text-center mb-3"
+              className="text-base sm:text-lg font-bold text-center mb-2 sm:mb-3"
               style={{ color: "var(--ucla-blue)" }}
             >
               {project.name}
             </h3>
             <p
-              className="text-sm leading-relaxed mb-3"
+              className="text-xs sm:text-sm leading-relaxed mb-2 sm:mb-3"
               style={{ color: "var(--text-primary)" }}
             >
               {project.description}
             </p>
-            <ul className="flex flex-col gap-1.5">
+            <ul className="flex flex-col gap-1 sm:gap-1.5">
               {project.bullets.map((bullet, i) => (
                 <li key={i} className="flex items-start gap-2">
                   <span
-                    className="mt-[6px] w-[5px] h-[5px] rounded-full shrink-0"
+                    className="mt-[5px] sm:mt-[6px] w-[5px] h-[5px] rounded-full shrink-0"
                     style={{ backgroundColor: "var(--ucla-blue)" }}
                   />
                   <span
-                    className="text-xs leading-relaxed"
+                    className="text-[11px] sm:text-xs leading-relaxed"
                     style={{ color: "var(--text-primary)" }}
                   >
                     {bullet}
@@ -248,28 +261,28 @@ function ProjectCard({ project }: { project: Project }) {
           </div>
 
           {/* Section 2: Links */}
-          <div className="flex flex-wrap justify-center gap-3">
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 shrink-0">
             {project.links.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="glass-pill rounded-full px-5 py-2.5 flex items-center gap-2.5 hover:scale-[1.03] active:scale-[0.97] transition-transform"
+                className="glass-pill rounded-full px-4 py-2 sm:px-5 sm:py-2.5 flex items-center gap-2 sm:gap-2.5 hover:scale-[1.03] active:scale-[0.97] transition-transform"
                 style={{ color: "var(--ucla-blue)" }}
               >
-                <LinkIcon type={link.icon} size={18} />
-                <span className="text-sm font-semibold">{link.label}</span>
+                <LinkIcon type={link.icon} size={16} />
+                <span className="text-xs sm:text-sm font-semibold">{link.label}</span>
               </a>
             ))}
           </div>
 
           {/* Section 3: Tech stack */}
-          <div className="flex flex-wrap justify-center gap-2">
+          <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2 shrink-0">
             {project.techStack.map((tech) => (
               <span
                 key={tech}
-                className="glass-pill rounded-full px-3 py-1 text-xs font-medium"
+                className="glass-pill rounded-full px-2.5 py-0.5 sm:px-3 sm:py-1 text-[11px] sm:text-xs font-medium"
                 style={{ color: "var(--ucla-blue)" }}
               >
                 {tech}

@@ -19,6 +19,85 @@ import ColorToggle from "./components/color-toggle";
 
 gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP);
 
+function Heading({ className }: { className?: string }) {
+  return (
+    <div className={className}>
+      <h1
+        className="font-display text-3xl min-[1440px]:text-4xl font-bold tracking-wide"
+        style={{ color: "var(--ucla-blue)" }}
+      >
+        Hi! I&apos;m <em className="name-gradient italic">Ethan</em>
+      </h1>
+      <p
+        className="mt-1.5 min-[1440px]:mt-2 text-base min-[1440px]:text-lg tracking-wide"
+        style={{ color: "var(--text-secondary)" }}
+      >
+        Studying CE @ UCLA
+      </p>
+    </div>
+  );
+}
+
+function ProfilePicture({ desktop, className }: { desktop?: boolean; className?: string }) {
+  const size = desktop ? 280 : 180;
+  return (
+    <div className={className}>
+      <div className={`neu-raised rounded-full ${desktop ? "p-3" : "p-2.5"}`}>
+        <div className={`neu-inset rounded-full ${desktop ? "p-2" : "p-1.5"}`}>
+          <Image
+            src="/images/homepage/website-headshot.png"
+            alt="Ethan Jin"
+            width={size}
+            height={size}
+            priority
+            className="rounded-full object-cover"
+            style={{ width: size, height: size }}
+          />
+        </div>
+      </div>
+      <div className={`absolute ${desktop ? "bottom-5 gap-2.5" : "bottom-4 gap-2"} left-1/2 -translate-x-1/2 flex items-center z-20`}>
+        <Link
+          href="/resume.pdf"
+          target="_blank"
+          className={`profile-overlay-btn resume-btn flex items-center rounded-full font-bold whitespace-nowrap ${desktop ? "gap-2 px-7 py-3 text-sm" : "gap-1.5 px-5 py-2 text-xs"}`}
+        >
+          Resume <HiArrowRight className={desktop ? "text-base" : "text-sm"} />
+        </Link>
+        <Link
+          href="https://www.linkedin.com/in/ethanrjin/"
+          target="_blank"
+          className={`profile-overlay-btn linkedin-btn flex items-center justify-center ${desktop ? "w-11 h-11 rounded-xl text-lg" : "w-9 h-9 rounded-lg text-base"}`}
+        >
+          <FaLinkedinIn />
+        </Link>
+        <Link
+          href="https://github.com/Ethjin8"
+          target="_blank"
+          className={`profile-overlay-btn github-btn flex items-center justify-center ${desktop ? "w-11 h-11 rounded-xl text-xl" : "w-9 h-9 rounded-lg text-base"}`}
+        >
+          <FaGithub />
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+function BioContent() {
+  return (
+    <>
+      <p style={{ color: "var(--text-primary)" }} className="text-sm leading-relaxed">
+        I&apos;m Ethan, a sophomore at UCLA studying <span className="bio-highlight">Computer Engineering</span>.
+      </p>
+      <p style={{ color: "var(--text-primary)" }} className="text-sm leading-relaxed mt-3">
+        From sustainability to healthcare, I love developing for <span className="bio-highlight">social good</span>. I focus on building systems that scale—especially those that involve <span className="bio-highlight">applied AI/ML</span>.
+      </p>
+      <p style={{ color: "var(--text-primary)" }} className="text-sm leading-relaxed mt-3">
+        Feel free to <span className="bio-highlight">reach out</span>, whether it&apos;s about opportunities, collaboration, or just to connect!
+      </p>
+    </>
+  );
+}
+
 export default function HomePage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
@@ -174,69 +253,12 @@ export default function HomePage() {
     <div ref={containerRef}>
       {/* ===== MOBILE LAYOUT ===== */}
       <div className="min-[1440px]:hidden flex flex-col items-center gap-5 px-3 pt-24 pb-16">
-        <div className="text-center">
-          <h1
-            className="font-display text-3xl font-bold tracking-wide"
-            style={{ color: "var(--ucla-blue)" }}
-          >
-            Hi! I&apos;m <em className="name-gradient italic">Ethan</em>
-          </h1>
-          <p
-            className="mt-1.5 text-base tracking-wide"
-            style={{ color: "var(--text-secondary)" }}
-          >
-            Studying CE @ UCLA
-          </p>
-        </div>
+        <Heading className="text-center" />
 
-        <div className="relative">
-          <div className="neu-raised rounded-full p-2.5">
-            <div className="neu-inset rounded-full p-1.5">
-              <Image
-                src="/images/homepage/website-headshot.png"
-                alt="Ethan Jin"
-                width={180}
-                height={180}
-                priority
-                className="rounded-full object-cover w-[180px] h-[180px]"
-              />
-            </div>
-          </div>
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
-            <Link
-              href="/resume.pdf"
-              target="_blank"
-              className="profile-overlay-btn resume-btn flex items-center gap-1.5 px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap"
-            >
-              Resume <HiArrowRight className="text-sm" />
-            </Link>
-            <Link
-              href="https://www.linkedin.com/in/ethanrjin/"
-              target="_blank"
-              className="profile-overlay-btn linkedin-btn flex items-center justify-center w-9 h-9 rounded-lg text-base"
-            >
-              <FaLinkedinIn />
-            </Link>
-            <Link
-              href="https://github.com/Ethjin8"
-              target="_blank"
-              className="profile-overlay-btn github-btn flex items-center justify-center w-9 h-9 rounded-lg text-base"
-            >
-              <FaGithub />
-            </Link>
-          </div>
-        </div>
+        <ProfilePicture className="relative" />
 
         <div ref={bioMobileRef} className="mobile-reveal bio-text-hidden neu-raised rounded-3xl p-5 w-full">
-          <p style={{ color: "var(--text-primary)" }} className="text-sm leading-relaxed">
-            I&apos;m Ethan, a sophomore at UCLA studying <span className="bio-highlight">Computer Engineering</span>.
-          </p>
-          <p style={{ color: "var(--text-primary)" }} className="text-sm leading-relaxed mt-3">
-            From sustainability to healthcare, I love developing for <span className="bio-highlight">social good</span>. I focus on building systems that scale—especially those that involve <span className="bio-highlight">applied AI/ML</span>.
-          </p>
-          <p style={{ color: "var(--text-primary)" }} className="text-sm leading-relaxed mt-3">
-            Feel free to <span className="bio-highlight">reach out</span>, whether it&apos;s about opportunities, collaboration, or just to connect!
-          </p>
+          <BioContent />
         </div>
 
         <div className="mobile-reveal neu-raised rounded-3xl p-5 w-full">
@@ -268,72 +290,14 @@ export default function HomePage() {
       <div className="hidden min-[1440px]:block relative" style={{ height: "300vh" }}>
         <div ref={heroRef} className="h-screen w-full relative overflow-hidden">
           {/* Profile picture — true center */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-            <div className="neu-raised rounded-full p-3">
-              <div className="neu-inset rounded-full p-2">
-                <Image
-                  src="/images/homepage/website-headshot.png"
-                  alt="Ethan Jin"
-                  width={280}
-                  height={280}
-                  priority
-                  className="rounded-full object-cover w-[280px] h-[280px]"
-                />
-              </div>
-            </div>
-            {/* Overlay buttons */}
-            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2.5 z-20">
-              <Link
-                href="/resume.pdf"
-                target="_blank"
-                className="profile-overlay-btn resume-btn flex items-center gap-2 px-7 py-3 rounded-full text-sm font-bold whitespace-nowrap"
-              >
-                Resume <HiArrowRight className="text-base" />
-              </Link>
-              <Link
-                href="https://www.linkedin.com/in/ethanrjin/"
-                target="_blank"
-                className="profile-overlay-btn linkedin-btn flex items-center justify-center w-11 h-11 rounded-xl text-lg"
-              >
-                <FaLinkedinIn />
-              </Link>
-              <Link
-                href="https://github.com/Ethjin8"
-                target="_blank"
-                className="profile-overlay-btn github-btn flex items-center justify-center w-11 h-11 rounded-xl text-xl"
-              >
-                <FaGithub />
-              </Link>
-            </div>
-          </div>
+          <ProfilePicture desktop className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10" />
 
           {/* Heading — above profile */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[calc(100%+185px)] text-center z-10">
-            <h1
-              className="font-display text-4xl font-bold tracking-wide"
-              style={{ color: "var(--ucla-blue)" }}
-            >
-              Hi! I&apos;m <em className="name-gradient italic">Ethan</em>
-            </h1>
-            <p
-              className="mt-2 text-lg tracking-wide"
-              style={{ color: "var(--text-secondary)" }}
-            >
-              Studying CE @ UCLA
-            </p>
-          </div>
+          <Heading className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[calc(100%+185px)] text-center z-10" />
 
           {/* Bio card — left of profile */}
           <div ref={bioDesktopRef} className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-[calc(100%+190px)] bio-text-hidden neu-raised rounded-3xl p-6 w-[300px] z-10">
-            <p style={{ color: "var(--text-primary)" }} className="text-sm leading-relaxed">
-              I&apos;m Ethan, a sophomore at UCLA studying <span className="bio-highlight">Computer Engineering</span>.
-            </p>
-            <p style={{ color: "var(--text-primary)" }} className="text-sm leading-relaxed mt-3">
-              From sustainability to healthcare, I love developing for <span className="bio-highlight">social good</span>. I focus on building systems that scale—especially those that involve <span className="bio-highlight">applied AI/ML</span>.
-            </p>
-            <p style={{ color: "var(--text-primary)" }} className="text-sm leading-relaxed mt-3">
-              Feel free to <span className="bio-highlight">reach out</span>, whether it&apos;s about opportunities, collaboration, or just to connect!
-            </p>
+            <BioContent />
           </div>
 
           {/* Typewriter + Color toggle row — right of profile */}

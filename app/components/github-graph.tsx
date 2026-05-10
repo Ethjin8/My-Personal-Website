@@ -108,7 +108,7 @@ export default function GitHubGraph() {
       <div className="flex-1 flex items-center justify-center overflow-hidden">
         <svg
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-          className="h-full w-auto block"
+          className="h-full w-auto block max-[1439px]:h-auto max-[1439px]:w-full"
         >
           {monthLabels.map((m) => (
             <text
