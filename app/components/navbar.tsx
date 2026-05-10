@@ -58,7 +58,7 @@ export default function Navbar() {
               className="relative px-3 sm:px-6 py-2 text-xs sm:text-sm font-display font-bold tracking-wide transition-colors duration-200 z-10"
               style={{
                 color: isActive
-                  ? "var(--ucla-blue)"
+                  ? "var(--nav-active)"
                   : "var(--text-secondary)",
               }}
             >
