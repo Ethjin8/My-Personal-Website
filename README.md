@@ -5,7 +5,7 @@ Personal portfolio site showcasing my experiences and projects. Built with a hyb
 ### Tech Stack
 
 - **Framework:** Next.js 15 (App Router, Turbopack)
-- **Styling:** Tailwind CSS v4, hybrid neumorphic + glassmorphic design system with CSS variable theming
+- **Styling:** Tailwind CSS v4, hybrid neumorphic + glassmorphic design system with CSS variable theming, SVG grain texture background
 - **Typography:** Libre Baskerville (display), DM Sans (body) via `next/font`
 - **Animation:** GSAP (ScrollTrigger, SplitText, scrubbed timelines), Framer Motion
 - **Deployment:** Vercel
@@ -18,7 +18,7 @@ Personal portfolio site showcasing my experiences and projects. Built with a hyb
 
 ### Features
 
-- **Hybrid design:** Neumorphic base layer (cards, tiles) with glassmorphic floating layer (navbar, tooltips, flip card backs, profile overlay buttons)
+- **Hybrid design:** Neumorphic base layer (cards, tiles) with glassmorphic floating layer (navbar, tooltips, flip card backs, profile overlay buttons), paper-like grain texture background
 - **Dual theme:** UCLA (light neumorphic, blue/gold) and TPHS (dark, warm red/yellow) — toggled via bento card, persisted to localStorage
 - **Responsive:** Desktop scrollytelling layout (1440px+) with separate mobile stack layout and scroll-reveal animations
 - **Hover interactions:** Currently Into front image and Currently Building screenshot pop on hover
