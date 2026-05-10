@@ -1,11 +1,11 @@
-// app/components/navbar.tsx
 "use client";
 
+import { useRef, useState, useLayoutEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
-const NAV_LINKS = [
+const NAV_ITEMS = [
   { label: "about", href: "/" },
   { label: "experience", href: "/experience" },
   { label: "projects", href: "/projects" },
@@ -13,46 +13,60 @@ const NAV_LINKS = [
 
 export default function Navbar() {
   const pathname = usePathname();
-  const [scrolled, setScrolled] = useState(false);
+  const itemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
+  const [pill, setPill] = useState<{ left: number; width: number } | null>(
+    null
+  );
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  useLayoutEffect(() => {
+    function measure() {
+      const activeIndex = NAV_ITEMS.findIndex((item) => item.href === pathname);
+      const el = itemRefs.current[activeIndex];
+      if (el) {
+        setPill({ left: el.offsetLeft, width: el.offsetWidth });
+      }
+    }
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [pathname]);
 
   return (
-    <nav
-      className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 px-2 py-1.5 rounded-full transition-all duration-500 ${
-        scrolled ? "shadow-lg" : "shadow-md"
-      }`}
-      style={{
-        background: "color-mix(in srgb, var(--card) 80%, transparent)",
-        borderColor: "var(--border)",
-        borderWidth: "1px",
-        borderStyle: "solid",
-        backdropFilter: "blur(16px)",
-        WebkitBackdropFilter: "blur(16px)",
-      }}
-    >
-      {NAV_LINKS.map((link) => {
-        const isActive =
-          link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
-
-        return (
-          <Link
-            key={link.href}
-            href={link.href}
-            className="px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 hover:scale-105"
-            style={{
-              color: isActive ? "var(--accent)" : "var(--foreground)",
-              backgroundColor: isActive ? "var(--muted)" : "transparent",
+    <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50">
+      <div className="glass-card rounded-full px-2 py-2 flex items-center gap-1 relative">
+        {pill && (
+          <motion.span
+            className="absolute top-2 bottom-2 rounded-full glass-pill"
+            initial={false}
+            animate={{ left: pill.left, width: pill.width }}
+            transition={{
+              type: "spring",
+              stiffness: 350,
+              damping: 30,
             }}
-          >
-            {link.label}
-          </Link>
-        );
-      })}
+          />
+        )}
+        {NAV_ITEMS.map((item, i) => {
+          const isActive = pathname === item.href;
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              ref={(el) => {
+                itemRefs.current[i] = el;
+              }}
+              className="relative px-3 sm:px-6 py-2 text-xs sm:text-sm font-display font-bold tracking-wide transition-colors duration-200 z-10"
+              style={{
+                color: isActive
+                  ? "var(--ucla-blue)"
+                  : "var(--text-secondary)",
+              }}
+            >
+              {item.label}
+            </Link>
+          );
+        })}
+      </div>
     </nav>
   );
 }
