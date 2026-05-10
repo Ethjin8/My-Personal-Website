@@ -1,685 +1,416 @@
 "use client";
 
-import Link from "next/link";
-import { LinkedInIcon, GitHubIcon } from "./social-icons";
+import { useRef, useState, useLayoutEffect } from "react";
 import Image from "next/image";
-import { useEffect } from "react";
+import Link from "next/link";
+import { FaLinkedinIn, FaGithub } from "react-icons/fa";
+import { HiArrowRight } from "react-icons/hi";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
+import { useGSAP } from "@gsap/react";
+import Typewriter from "./components/typewriter";
+import TechStack from "./components/tech-stack";
+import CurrentlyInto from "./components/currently-into";
+import GitHubGraph from "./components/github-graph";
+import CurrentlyBuilding from "./components/currently-building";
+import CurrentlyLearning from "./components/currently-learning";
+import ColorToggle from "./components/color-toggle";
 
-export default function Home() {
-  useEffect(() => {
-    // Typewriter effect
-    const fullPhrases = [
-      "software engineering.",
-      "web development.",
-      "artificial intelligence.",
-      "data science.",
-      "accessible computing.",
-      "healthcare.",
-      "sustainability.",
-    ];
+gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP);
 
-    // Get the appropriate phrase based on screen size
-    const getAppropriatePhrase = (index: number): string => {
-      const isMobile = window.innerWidth < 640;
-      const phrase = fullPhrases[index];
+export default function HomePage() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const bioDesktopRef = useRef<HTMLDivElement>(null);
+  const bioMobileRef = useRef<HTMLDivElement>(null);
+  const intoRef = useRef<HTMLDivElement>(null);
+  const buildingRef = useRef<HTMLDivElement>(null);
+  const [twMinHeight, setTwMinHeight] = useState<number | undefined>(undefined);
 
-      // For mobile screens, shorten longer phrases to prevent overflow
-      if (isMobile && phrase.length > 15) {
-        // Map long phrases to shorter versions for mobile
-        const shortPhrases: Record<string, string> = {
-          "software engineering.": "coding.",
-          "artificial intelligence.": "AI.",
-          "accessible computing.": "accessibility.",
-        };
-        return shortPhrases[phrase] || phrase;
-      }
+  useLayoutEffect(() => {
+    function compute() {
+      if (window.innerWidth < 1440) return;
+      const bio = bioDesktopRef.current;
+      const into = intoRef.current;
+      const building = buildingRef.current;
+      if (!bio || !into || !building) return;
 
-      return phrase;
-    };
+      const hBio = bio.offsetHeight;
+      const hInto = into.offsetHeight;
+      const hBuilding = building.offsetHeight;
 
-    const typewriterElement = document.querySelector(".typewriter-text");
-    if (!typewriterElement) return;
-
-    let phraseIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-    let typingSpeed = 100;
-
-    function typeWriter() {
-      const currentPhrase = getAppropriatePhrase(phraseIndex);
-
-      if (isDeleting) {
-        // Deleting text
-        charIndex--;
-        typingSpeed = 35; // Faster when deleting
-      } else {
-        // Typing text
-        charIndex++;
-        typingSpeed = 80 + Math.random() * 50; // Slightly random typing speed for realism
-      }
-
-      // Update text content
-      if (typewriterElement) {
-        typewriterElement.textContent = currentPhrase.substring(0, charIndex);
-      }
-
-      // Check if word is complete
-      if (!isDeleting && charIndex === currentPhrase.length) {
-        // Pause at the end of phrase
-        isDeleting = true;
-        typingSpeed = 2000; // Wait before deleting
-      } else if (isDeleting && charIndex === 0) {
-        // Move to next phrase when deletion complete
-        isDeleting = false;
-        phraseIndex = (phraseIndex + 1) % fullPhrases.length;
-        typingSpeed = 700; // Pause before typing next phrase
-      }
-
-      setTimeout(typeWriter, typingSpeed);
+      // Top gap match: hTw = hBio + 2*(hInto - hBuilding)
+      // Bottom gap match: hTw = hBio - 128  (128 = 2*(GH_Y - CL_Y) = 2*(180-116))
+      // Average for balanced result:
+      const target = hBio + (hInto - hBuilding) - 64;
+      if (target > 0) setTwMinHeight(target);
     }
-
-    // Start the typewriter effect
-    typeWriter();
+    compute();
+    window.addEventListener("resize", compute);
+    return () => window.removeEventListener("resize", compute);
   }, []);
 
-  return (
-    <div className="space-y-14 max-w-6xl mx-auto px-6 md:px-8 lg:px-12 py-10">
-      {/* Header */}
-      <section className="space-y-3 md:space-y-5">
-        <h1
-          className="text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-[#2774AE] via-[#1384CB] to-[#FFD100] bg-clip-text text-transparent"
-          style={{
-            backgroundSize: "200% 200%",
-            animation: "gradient 8s ease infinite",
-          }}
-        >
-          Ethan Jin
-        </h1>
-        <p className="text-lg md:text-xl text-gray-600 text-center font-light tracking-wide">
-          Welcome to my website!
-        </p>
-      </section>
+  useGSAP(
+    () => {
+      // Bio card SplitText reveal — runs on mount
+      [bioDesktopRef.current, bioMobileRef.current].forEach((bio) => {
+        if (!bio) return;
+        bio.classList.remove("bio-text-hidden");
+        const paragraphs = bio.querySelectorAll("p");
+        const allLines: Element[] = [];
+        paragraphs.forEach((p) => {
+          const split = SplitText.create(p, { type: "lines" });
+          allLines.push(...split.lines);
+        });
+        gsap.fromTo(
+          allLines,
+          { autoAlpha: 0, y: 12 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.5,
+            stagger: { amount: 0.4 },
+            ease: "power2.out",
+          }
+        );
+      });
 
-      {/* Personal Description */}
-      <section>
-        <div className="flex flex-col md:flex-row items-stretch justify-center gap-8 md:gap-12">
-          {/* Left: Profile Icon Placeholder */}
-          <div className="relative group self-center md:self-center">
-            <div className="absolute -inset-1 bg-gradient-to-r from-[#2774AE] to-[#FFD100] rounded-full opacity-50 blur-md group-hover:opacity-100 transition-all duration-500"></div>
-            <div className="flex flex-col items-center justify-center w-48 h-48 md:w-56 md:h-56 bg-white rounded-full relative border border-gray-50 shadow-md overflow-hidden">
-              {/* Profile Image */}
+      const mm = gsap.matchMedia();
+
+      mm.add("(max-width: 1439px)", () => {
+        const mobileCards = gsap.utils.toArray<HTMLElement>(".mobile-reveal");
+        gsap.set(mobileCards, { autoAlpha: 0, y: 30 });
+
+        mobileCards.forEach((card) => {
+          gsap.to(card, {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.6,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          });
+        });
+      });
+
+      mm.add("(min-width: 1440px)", () => {
+        const cards = gsap.utils.toArray<HTMLElement>(".bento-reveal");
+        gsap.set(cards, { autoAlpha: 0, y: 40 });
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 1,
+            pin: heroRef.current,
+          },
+        });
+
+        tl.to(
+          ".scroll-indicator",
+          { autoAlpha: 0, y: -10, duration: 0.08, ease: "none" },
+          0
+        );
+
+        tl.to(
+          '[data-card="currently-into"]',
+          { autoAlpha: 1, y: 0, duration: 0.15, ease: "none" },
+          0.05
+        );
+
+        tl.fromTo(
+          '[data-card="tech-stack"]',
+          { autoAlpha: 0, x: -50, y: 0 },
+          { autoAlpha: 1, x: 0, y: 0, duration: 0.15, ease: "none" },
+          0.12
+        );
+
+        tl.fromTo(
+          '[data-card="currently-building"]',
+          { autoAlpha: 0, y: -40, x: 0 },
+          { autoAlpha: 1, y: 0, x: 0, duration: 0.15, ease: "none" },
+          0.28
+        );
+
+        tl.fromTo(
+          '[data-card="color-toggle"]',
+          { autoAlpha: 0, x: 30, y: 0 },
+          { autoAlpha: 1, x: 0, y: 0, duration: 0.15, ease: "none" },
+          0.35
+        );
+
+        tl.fromTo(
+          '[data-card="github-graph"]',
+          { autoAlpha: 0, y: 50 },
+          { autoAlpha: 1, y: 0, duration: 0.15, ease: "none" },
+          0.48
+        );
+
+        tl.fromTo(
+          '[data-card="currently-learning"]',
+          { autoAlpha: 0, y: 50, x: 20 },
+          { autoAlpha: 1, y: 0, x: 0, duration: 0.15, ease: "none" },
+          0.58
+        );
+
+        gsap.to(".scroll-indicator-arrow", {
+          y: 6,
+          duration: 1,
+          ease: "sine.inOut",
+          repeat: -1,
+          yoyo: true,
+        });
+      });
+    },
+    { scope: containerRef }
+  );
+
+  return (
+    <div ref={containerRef}>
+      {/* ===== MOBILE LAYOUT ===== */}
+      <div className="min-[1440px]:hidden flex flex-col items-center gap-5 px-3 pt-24 pb-16">
+        <div className="text-center">
+          <h1
+            className="font-display text-3xl font-bold tracking-wide"
+            style={{ color: "var(--ucla-blue)" }}
+          >
+            Hi! I&apos;m <em className="name-gradient italic">Ethan</em>
+          </h1>
+          <p
+            className="mt-1.5 text-base tracking-wide"
+            style={{ color: "var(--text-secondary)" }}
+          >
+            Studying CE @ UCLA
+          </p>
+        </div>
+
+        <div className="relative">
+          <div className="neu-raised rounded-full p-2.5">
+            <div className="neu-inset rounded-full p-1.5">
               <Image
-                src="/images/website_headshot.jpg" // Images in public folder are referenced from the root
-                alt="Ethan Jin profile photo"
-                width={224} // 56*4 for high resolution
-                height={224}
-                className="w-full h-full object-cover"
+                src="/images/homepage/website-headshot.png"
+                alt="Ethan Jin"
+                width={180}
+                height={180}
                 priority
+                className="rounded-full object-cover w-[180px] h-[180px]"
               />
             </div>
           </div>
-          {/* Divider - Only visible on md screens and up */}
-          <div className="hidden md:flex w-[2px] bg-gradient-to-b from-transparent via-[#2774AE] to-transparent opacity-80 self-stretch" />
-          {/* Right: Personal Description Placeholder */}
-          <div className="flex-1 flex items-center justify-center">
-            <div className="flex flex-col items-center justify-center w-full">
-              <p className="text-lg md:text-xl text-gray-700 text-center mb-5 md:mb-7 leading-relaxed px-2">
-                Hi! I&apos;m Ethan, a computer engineering student @ UCLA. By
-                exploring the intersection of technology and society, I aim to
-                develop creative projects that improve lives and tackle
-                real-world challenges. I&apos;m particularly interested in AI/ML
-                and its applications in sustainability, healthcare, and
-                accessibility.
-                <br />
-                <br />
-                In my free time, I enjoy playing basketball and badminton,
-                reading, and watching movies. Feel free to reach out, whether
-                it&apos;s about opportunities, collaboration, or just to
-                connect!
-              </p>
-              {/* Social Links */}
-              <div className="flex flex-wrap justify-center gap-4 md:gap-8 mt-4">
-                <Link
-                  href="https://docs.google.com/document/d/1yULjROx-WTMg-UTXc1oL_uEzvVU3c7TnIKhflOpT7tY/edit?tab=t.0"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-primary inline-flex items-center px-4 py-2 md:px-6 md:py-2.5 bg-gradient-to-r from-[#2774AE] to-[#0056A5] text-white rounded-full font-medium shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300"
-                >
-                  <span>Resume</span>
-                  <svg
-                    className="ml-1.5 w-4 h-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M14 5l7 7m0 0l-7 7m7-7H3"
-                    />
-                  </svg>
-                </Link>
-                <Link
-                  href="https://linkedin.com/in/ethanrjin"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="LinkedIn"
-                >
-                  <span className="group inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-gray-100 rounded-full hover:bg-blue-50 transition-all duration-300">
-                    <span className="transition-all duration-300 ease-out transform group-hover:scale-125">
-                      <LinkedInIcon className="w-6 h-6 md:w-8 md:h-8 text-gray-400 group-hover:text-[#0A66C2]" />
-                    </span>
-                  </span>
-                </Link>
-                <Link
-                  href="https://github.com/ethjin8"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="GitHub"
-                >
-                  <span className="group inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-gray-100 rounded-full hover:bg-gray-200 transition-all duration-300">
-                    <span className="transition-all duration-300 ease-out transform group-hover:scale-125">
-                      <GitHubIcon className="w-6 h-6 md:w-8 md:h-8 text-gray-400 group-hover:text-black" />
-                    </span>
-                  </span>
-                </Link>
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
+            <Link
+              href="/resume.pdf"
+              target="_blank"
+              className="profile-overlay-btn resume-btn flex items-center gap-1.5 px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap"
+            >
+              Resume <HiArrowRight className="text-sm" />
+            </Link>
+            <Link
+              href="https://www.linkedin.com/in/ethanrjin/"
+              target="_blank"
+              className="profile-overlay-btn linkedin-btn flex items-center justify-center w-9 h-9 rounded-lg text-base"
+            >
+              <FaLinkedinIn />
+            </Link>
+            <Link
+              href="https://github.com/Ethjin8"
+              target="_blank"
+              className="profile-overlay-btn github-btn flex items-center justify-center w-9 h-9 rounded-lg text-base"
+            >
+              <FaGithub />
+            </Link>
+          </div>
+        </div>
+
+        <div ref={bioMobileRef} className="mobile-reveal bio-text-hidden neu-raised rounded-3xl p-5 w-full">
+          <p style={{ color: "var(--text-primary)" }} className="text-sm leading-relaxed">
+            I&apos;m Ethan, a sophomore at UCLA studying <span className="bio-highlight">Computer Engineering</span>.
+          </p>
+          <p style={{ color: "var(--text-primary)" }} className="text-sm leading-relaxed mt-3">
+            From sustainability to healthcare, I love developing for <span className="bio-highlight">social good</span>. I focus on building systems that scale—especially those that involve <span className="bio-highlight">applied AI/ML</span>.
+          </p>
+          <p style={{ color: "var(--text-primary)" }} className="text-sm leading-relaxed mt-3">
+            Feel free to <span className="bio-highlight">reach out</span>, whether it&apos;s about opportunities, collaboration, or just to connect!
+          </p>
+        </div>
+
+        <div className="mobile-reveal neu-raised rounded-3xl p-5 w-full">
+          <Typewriter />
+        </div>
+
+        <div className="mobile-reveal w-full">
+          <CurrentlyInto />
+        </div>
+
+        <div className="mobile-reveal w-full">
+          <TechStack />
+        </div>
+
+        <div className="mobile-reveal w-full">
+          <CurrentlyBuilding />
+        </div>
+
+        <div className="mobile-reveal w-full overflow-x-auto">
+          <GitHubGraph />
+        </div>
+
+        <div className="mobile-reveal w-full">
+          <CurrentlyLearning />
+        </div>
+      </div>
+
+      {/* ===== DESKTOP LAYOUT ===== */}
+      <div className="hidden min-[1440px]:block relative" style={{ height: "300vh" }}>
+        <div ref={heroRef} className="h-screen w-full relative overflow-hidden">
+          {/* Profile picture — true center */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+            <div className="neu-raised rounded-full p-3">
+              <div className="neu-inset rounded-full p-2">
+                <Image
+                  src="/images/homepage/website-headshot.png"
+                  alt="Ethan Jin"
+                  width={280}
+                  height={280}
+                  priority
+                  className="rounded-full object-cover w-[280px] h-[280px]"
+                />
               </div>
+            </div>
+            {/* Overlay buttons */}
+            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2.5 z-20">
+              <Link
+                href="/resume.pdf"
+                target="_blank"
+                className="profile-overlay-btn resume-btn flex items-center gap-2 px-7 py-3 rounded-full text-sm font-bold whitespace-nowrap"
+              >
+                Resume <HiArrowRight className="text-base" />
+              </Link>
+              <Link
+                href="https://www.linkedin.com/in/ethanrjin/"
+                target="_blank"
+                className="profile-overlay-btn linkedin-btn flex items-center justify-center w-11 h-11 rounded-xl text-lg"
+              >
+                <FaLinkedinIn />
+              </Link>
+              <Link
+                href="https://github.com/Ethjin8"
+                target="_blank"
+                className="profile-overlay-btn github-btn flex items-center justify-center w-11 h-11 rounded-xl text-xl"
+              >
+                <FaGithub />
+              </Link>
+            </div>
+          </div>
+
+          {/* Heading — above profile */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[calc(100%+185px)] text-center z-10">
+            <h1
+              className="font-display text-4xl font-bold tracking-wide"
+              style={{ color: "var(--ucla-blue)" }}
+            >
+              Hi! I&apos;m <em className="name-gradient italic">Ethan</em>
+            </h1>
+            <p
+              className="mt-2 text-lg tracking-wide"
+              style={{ color: "var(--text-secondary)" }}
+            >
+              Studying CE @ UCLA
+            </p>
+          </div>
+
+          {/* Bio card — left of profile */}
+          <div ref={bioDesktopRef} className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-[calc(100%+190px)] bio-text-hidden neu-raised rounded-3xl p-6 w-[300px] z-10">
+            <p style={{ color: "var(--text-primary)" }} className="text-sm leading-relaxed">
+              I&apos;m Ethan, a sophomore at UCLA studying <span className="bio-highlight">Computer Engineering</span>.
+            </p>
+            <p style={{ color: "var(--text-primary)" }} className="text-sm leading-relaxed mt-3">
+              From sustainability to healthcare, I love developing for <span className="bio-highlight">social good</span>. I focus on building systems that scale—especially those that involve <span className="bio-highlight">applied AI/ML</span>.
+            </p>
+            <p style={{ color: "var(--text-primary)" }} className="text-sm leading-relaxed mt-3">
+              Feel free to <span className="bio-highlight">reach out</span>, whether it&apos;s about opportunities, collaboration, or just to connect!
+            </p>
+          </div>
+
+          {/* Typewriter + Color toggle row — right of profile */}
+          <div
+            className="absolute top-1/2 left-1/2 -translate-y-1/2 translate-x-[190px] flex items-stretch gap-5 z-10"
+            style={twMinHeight ? { minHeight: twMinHeight } : undefined}
+          >
+            <div className="neu-raised rounded-3xl p-6 w-[300px] flex items-center justify-center">
+              <Typewriter />
+            </div>
+            <div className="bento-reveal w-[200px]" data-card="color-toggle">
+              <ColorToggle />
+            </div>
+          </div>
+
+          {/* Scroll indicator */}
+          <div className="scroll-indicator absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-[220px] flex flex-col items-center gap-1.5 z-10">
+            <span
+              className="text-[11px] font-medium tracking-[0.15em] uppercase"
+              style={{ color: "var(--text-secondary)" }}
+            >
+              Scroll down
+            </span>
+            <div className="scroll-indicator-arrow">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <path
+                  d="M9 3v9m0 0l-3.5-3.5M9 12l3.5-3.5"
+                  stroke="var(--ucla-blue)"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+          </div>
+
+          {/* === BENTO CARDS === */}
+          <div ref={intoRef} className="absolute top-6 left-1/2 -translate-x-[calc(100%+190px)]">
+            <div className="bento-reveal" data-card="currently-into">
+              <CurrentlyInto />
+            </div>
+          </div>
+
+          <div
+            className="absolute top-6 left-1/2 -translate-x-[calc(100%+530px)]"
+            style={{ height: "calc(50vh + 295px)" }}
+          >
+            <div className="bento-reveal h-full" data-card="tech-stack">
+              <TechStack />
+            </div>
+          </div>
+
+          <div ref={buildingRef} className="absolute top-6 left-1/2 translate-x-[190px] w-[520px]">
+            <div className="bento-reveal" data-card="currently-building">
+              <CurrentlyBuilding />
+            </div>
+          </div>
+
+          <div
+            className="absolute top-1/2 left-1/2 w-[700px] h-[139px]"
+            style={{ transform: "translateX(-490px) translateY(180px)" }}
+          >
+            <div className="bento-reveal w-full h-full" data-card="github-graph">
+              <GitHubGraph />
+            </div>
+          </div>
+
+          <div
+            className="absolute top-1/2 left-1/2 w-[480px] h-[203px]"
+            style={{ transform: "translateX(230px) translateY(116px)" }}
+          >
+            <div className="bento-reveal w-full h-full" data-card="currently-learning">
+              <CurrentlyLearning />
             </div>
           </div>
         </div>
-      </section>
-
-      {/* Typewriter Effect */}
-      <section className="flex justify-center items-center py-4 md:py-6">
-        <div className="bg-white/50 backdrop-blur-sm px-4 sm:px-8 py-4 rounded-xl shadow-sm border border-gray-50 text-center">
-          <div className="typewriter-container">
-            <div className="w-full md:w-auto">
-              <span className="text-xl md:text-3xl font-medium text-gray-700">
-                I am passionate about{" "}
-              </span>
-            </div>
-            <div className="inline-block">
-              <span className="text-xl md:text-3xl font-bold bg-gradient-to-r from-[#2774AE] via-[#1384CB] to-[#FFD100] bg-clip-text text-transparent typewriter-text"></span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Experience */}
-      <section>
-        <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-[#2774AE] to-[#FFD100] bg-clip-text text-transparent">
-          Experience
-        </h2>
-        <div className="space-y-6">
-          <div className="card-hover p-6 md:p-8 bg-white border border-gray-50 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300">
-            <div className="flex flex-wrap md:flex-nowrap gap-4 md:gap-6 mb-4">
-              {/* Logo */}
-              <div className="flex-shrink-0 flex items-center justify-center">
-                <Image
-                  src="/images/mdd-lab-logo.png"
-                  alt="ACM UCLA logo"
-                  width={90}
-                  height={90}
-                  className="object-contain max-h-20 md:max-h-24 rounded border border-gray-200 p-1"
-                  style={{ background: "rgba(243, 244, 246, 0.5)" }}
-                />
-              </div>
-
-              <div className="flex flex-1 flex-wrap md:flex-nowrap justify-between items-start">
-                <div>
-                  <h3 className="text-lg md:text-xl font-semibold text-gray-900 hover:text-[#2774AE] transition-colors duration-300">
-                    Materials Design Through Dynamics Lab
-                  </h3>
-                  <p className="text-[#2774AE] font-medium mt-1">
-                    Undergraduate Researcher
-                  </p>
-                </div>
-                <span className="px-2 py-1 md:px-3 md:py-1 bg-blue-50 text-[#2774AE] rounded-full text-xs md:text-sm font-medium whitespace-nowrap mt-2 md:mt-0">
-                  November 2025 - Present
-                </span>
-              </div>
-            </div>
-            <ul className="space-y-2 md:space-y-3">
-              <li className="flex items-start">
-                <span className="inline-flex items-center justify-center w-5 h-5 bg-blue-100 rounded-full mr-3 flex-shrink-0">
-                  <span className="w-1.5 h-1.5 bg-[#2774AE] rounded-full"></span>
-                </span>
-                <span className="text-gray-700">
-                  Building a web platform enabling rapid X-ray diffraction phase
-                  identification, reducing manual analysis time from hours to
-                  minutes
-                </span>
-              </li>
-              <li className="flex items-start">
-                <span className="inline-flex items-center justify-center w-5 h-5 bg-blue-100 rounded-full mr-3 flex-shrink-0">
-                  <span className="w-1.5 h-1.5 bg-[#2774AE] rounded-full"></span>
-                </span>
-                <span className="text-gray-700">
-                  Integrating 18,000 pretrained phase-specific neural network
-                  models, designing a backend system that dynamically loads only
-                  the few hundred relevant models needed per query to enable
-                  efficient GPU-accelerated inference
-                </span>
-              </li>
-            </ul>
-          </div>
-
-          <div className="card-hover p-6 md:p-8 bg-white border border-gray-50 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300">
-            <div className="flex flex-wrap md:flex-nowrap gap-4 md:gap-6 mb-4">
-              {/* Logo */}
-              <div className="flex-shrink-0 flex items-center justify-center">
-                <Image
-                  src="/images/acm-logo.png"
-                  alt="ACM UCLA logo"
-                  width={65}
-                  height={65}
-                  className="object-contain max-h-20 md:max-h-24 rounded border border-gray-200 p-1"
-                  style={{ background: "rgba(243, 244, 246, 0.5)" }}
-                />
-              </div>
-
-              <div className="flex flex-1 flex-wrap md:flex-nowrap justify-between items-start">
-                <div>
-                  <h3 className="text-lg md:text-xl font-semibold text-gray-900 hover:text-[#2774AE] transition-colors duration-300">
-                    Association of Computing Machinery @ UCLA
-                  </h3>
-                  <p className="text-[#2774AE] font-medium mt-1">
-                    Development Team Intern
-                  </p>
-                </div>
-                <span className="px-2 py-1 md:px-3 md:py-1 bg-blue-50 text-[#2774AE] rounded-full text-xs md:text-sm font-medium whitespace-nowrap mt-2 md:mt-0">
-                  October 2025 - Present
-                </span>
-              </div>
-            </div>
-            <ul className="space-y-2 md:space-y-3">
-              <li className="flex items-start">
-                <span className="inline-flex items-center justify-center w-5 h-5 bg-blue-100 rounded-full mr-3 flex-shrink-0">
-                  <span className="w-1.5 h-1.5 bg-[#2774AE] rounded-full"></span>
-                </span>
-                <span className="text-gray-700">
-                  Full-stack development to support ACM’s web services (membership portal, main website) for over 3500+ general members and event attendees
-                </span>
-              </li>
-              <li className="flex items-start">
-                <span className="inline-flex items-center justify-center w-5 h-5 bg-blue-100 rounded-full mr-3 flex-shrink-0">
-                  <span className="w-1.5 h-1.5 bg-[#2774AE] rounded-full"></span>
-                </span>
-                <span className="text-gray-700">
-                  Integrating a new PostgreSQL database with membership portal to process over 400+ intern applications
-                </span>
-              </li>
-            </ul>
-          </div>
-
-          <div className="card-hover p-6 md:p-8 bg-white border border-gray-50 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300">
-            <div className="flex flex-wrap md:flex-nowrap gap-4 md:gap-6 mb-4">
-              {/* Logo */}
-              <div className="flex-shrink-0 flex items-center justify-center">
-                <Image
-                  src="/images/rehs_logo.png"
-                  alt="UCSD REHS logo"
-                  width={90}
-                  height={90}
-                  className="object-contain max-h-20 md:max-h-24 rounded border border-gray-200 p-1"
-                  style={{ background: "rgba(243, 244, 246, 0.5)" }}
-                />
-              </div>
-
-              <div className="flex flex-1 flex-wrap md:flex-nowrap justify-between items-start">
-                <div>
-                  <h3 className="text-lg md:text-xl font-semibold text-gray-900 hover:text-[#2774AE] transition-colors duration-300">
-                    UCSD Research Experience for High School Students
-                  </h3>
-                  <p className="text-[#2774AE] font-medium mt-1">
-                    HPC Systems Engineer
-                  </p>
-                </div>
-                <span className="px-2 py-1 md:px-3 md:py-1 bg-blue-50 text-[#2774AE] rounded-full text-xs md:text-sm font-medium whitespace-nowrap mt-2 md:mt-0">
-                  June-August (2023-2024)
-                </span>
-              </div>
-            </div>
-            <ul className="space-y-2 md:space-y-3">
-              <li className="flex items-start">
-                <span className="inline-flex items-center justify-center w-5 h-5 bg-blue-100 rounded-full mr-3 flex-shrink-0">
-                  <span className="w-1.5 h-1.5 bg-[#2774AE] rounded-full"></span>
-                </span>
-                <span className="text-gray-700">
-                  Developed Python scripts to process and visualize 158+ system
-                  dependency files, enabling automation of software package
-                  installation workflows{" "}
-                  <Link
-                    href="https://docs.google.com/presentation/d/1-1d2MG9vXZXKiK2H7ER2NWmSVbiMt40v/edit?slide=id.p1#slide=id.p1"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline inline-flex items-center text-[#2774AE] hover:text-[#FFD100] font-medium text-sm md:text-base transition-colors duration-300"
-                  >
-                    (project presentation)
-                  </Link>
-                </span>
-              </li>
-              <li className="flex items-start">
-                <span className="inline-flex items-center justify-center w-5 h-5 bg-blue-100 rounded-full mr-3 flex-shrink-0">
-                  <span className="w-1.5 h-1.5 bg-[#2774AE] rounded-full"></span>
-                </span>
-                <span className="text-gray-700">
-                  Created command-line interface tool that generated Python
-                  Pandas dataframe structures and pie chart models from 63
-                  module logs to analyze software usage patterns within Expanse,
-                  increasing deployment efficiency {""}
-                  <Link
-                    href="https://docs.google.com/presentation/u/1/d/1SZSHN_lNp8_bxzvU3WAFB3IY7McgDpLM/edit?slide=id.p1#slide=id.p1"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline inline-flex items-center text-[#2774AE] hover:text-[#FFD100] font-medium text-sm md:text-base transition-colors duration-300"
-                  >
-                    (project poster)
-                  </Link>
-                </span>
-              </li>
-              <li className="flex items-start">
-                <span className="inline-flex items-center justify-center w-5 h-5 bg-blue-100 rounded-full mr-3 flex-shrink-0">
-                  <span className="w-1.5 h-1.5 bg-[#2774AE] rounded-full"></span>
-                </span>
-                <span className="text-gray-700">
-                  Exposed time-tracking error in the original logging program,
-                  improving the accuracy of data collection processes
-                </span>
-              </li>
-            </ul>
-          </div>
-
-          <div className="card-hover p-6 md:p-8 bg-white border border-gray-50 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300">
-            <div className="flex flex-wrap md:flex-nowrap gap-4 md:gap-6 mb-4">
-              {/* Logo */}
-              <div className="flex-shrink-0 flex items-center justify-center">
-                <Image
-                  src="/images/map_logo.png"
-                  alt="UCSD MAP logo"
-                  width={150}
-                  height={150}
-                  className="object-contain max-h-20 md:max-h-24 rounded border border-gray-200 p-1"
-                  style={{ background: "rgba(243, 244, 246, 0.5)" }}
-                />
-              </div>
-
-              <div className="flex flex-1 flex-wrap md:flex-nowrap justify-between items-start">
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900 hover:text-[#2774AE] transition-colors duration-300">
-                    UCSD Mentor Assistance Program
-                  </h3>
-                  <p className="text-[#2774AE] font-medium mt-1">
-                    IT Services Intern
-                  </p>
-                </div>
-                <span className="px-3 py-1 bg-blue-50 text-[#2774AE] rounded-full text-sm font-medium whitespace-nowrap">
-                  October-May (2022-2024)
-                </span>
-              </div>
-            </div>
-            <ul className="space-y-3">
-              <li className="flex items-start">
-                <span className="inline-flex items-center justify-center w-5 h-5 bg-blue-100 rounded-full mr-3 flex-shrink-0">
-                  <span className="w-1.5 h-1.5 bg-[#2774AE] rounded-full"></span>
-                </span>
-                <span className="text-gray-700">
-                  Learned mobile computing by developing various projects
-                  through weekly stand-up meetings alongside other interns
-                </span>
-              </li>
-              <li className="flex items-start">
-                <span className="inline-flex items-center justify-center w-5 h-5 bg-blue-100 rounded-full mr-3 flex-shrink-0">
-                  <span className="w-1.5 h-1.5 bg-[#2774AE] rounded-full"></span>
-                </span>
-                <span className="text-gray-700">
-                  Built 6+ features for UCSD’s official mobile app to improve
-                  accessibility & data flow for users with audiovisual
-                  impairments
-                </span>
-              </li>
-              <li className="flex items-start">
-                <span className="inline-flex items-center justify-center w-5 h-5 bg-blue-100 rounded-full mr-3 flex-shrink-0">
-                  <span className="w-1.5 h-1.5 bg-[#2774AE] rounded-full"></span>
-                </span>
-                <span className="text-gray-700">
-                  Developed <b>ClassTime</b>, a time-tracking scheduler app
-                  aiming to enhance student productivity
-                </span>
-              </li>
-              <li className="flex items-start">
-                <span className="inline-flex items-center justify-center w-5 h-5 bg-blue-100 rounded-full mr-3 flex-shrink-0">
-                  <span className="w-1.5 h-1.5 bg-[#2774AE] rounded-full"></span>
-                </span>
-                <span className="text-gray-700">
-                  Utilized Google’s Gemini LLM to create <b>Cartelligence</b>,
-                  an AI-based grocery shopping web application
-                </span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* Projects */}
-      <section>
-        <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-[#2774AE] to-[#FFD100] bg-clip-text text-transparent">
-          Projects
-        </h2>
-
-        <div className="grid gap-6 md:gap-8">
-          <div className="card-hover group p-6 md:p-8 bg-white border border-gray-50 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300">
-            <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-center">
-              {/* Project Content */}
-              <div className="flex flex-col flex-1 justify-center items-center text-center">
-                <h3 className="text-xl md:text-2xl font-semibold text-gray-900 group-hover:text-[#2774AE] transition-colors duration-300">
-                  AI Resume Critiquer
-                </h3>
-                <p className="text-sm md:text-base text-gray-600 mt-2 md:mt-3 mb-3 md:mb-4 max-w-md">
-                  A web application that leverages Meta&apos;s open-source LLM,
-                  Llama, to provide constructive feedback for resumes. Outputs
-                  can be customized for specific job descriptions, creativity
-                  level, response length, and depth of analysis.
-                </p>
-
-                {/* Technology Tags */}
-                <div className="flex flex-wrap gap-2 mb-4 justify-center">
-                  {["Ollama", "Streamlit", "Python"].map((tech, index) => (
-                    <span
-                      key={index}
-                      className="px-3 py-1 bg-blue-50 text-[#2774AE] rounded-full text-xs font-medium whitespace-nowrap"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-
-                <Link
-                  href="https://github.com/Ethjin8/AI-Resume-Critiquer"
-                  target="_blank"
-                  className="inline-flex items-center text-[#2774AE] hover:text-[#FFD100] font-medium text-sm md:text-base transition-colors duration-300"
-                >
-                  <span>View Project</span>
-                  <svg
-                    className="ml-1.5 md:ml-2 w-4 h-4 md:w-5 md:h-5 transform group-hover:translate-x-1 transition-transform duration-300"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 7l5 5m0 0l-5 5m5-5H6"
-                    />
-                  </svg>
-                </Link>
-              </div>
-
-              {/* Project Image Area */}
-              <div className="w-full md:w-2/5 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center p-2">
-                <Image
-                  src="/images/ai_resume_screenshot.png"
-                  alt="Cartelligence app screenshot"
-                  width={700}
-                  height={394}
-                  className="w-full h-auto object-contain"
-                  quality={100}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="card-hover group p-6 md:p-8 bg-white border border-gray-50 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300">
-            <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-center">
-              {/* Project Content */}
-              <div className="flex flex-col flex-1 justify-center items-center text-center">
-                <h3 className="text-xl md:text-2xl font-semibold text-gray-900 group-hover:text-[#2774AE] transition-colors duration-300">
-                  Cartelligence
-                </h3>
-                <p className="text-sm md:text-base text-gray-600 mt-2 md:mt-3 mb-3 md:mb-4 max-w-md">
-                  Powered by Google&apos;s Gemini LLM, this web application
-                  improves the grocery shopping experience by offering the
-                  following features:
-                </p>
-                <ul className="space-y-2 md:space-y-3 mb-4 text-left">
-                  {[
-                    "Grocery list creation",
-                    "Recipe generation",
-                    "Diet analysis",
-                    "Alternative ingredient finder",
-                    "Detailed nutritional insights",
-                  ].map((feature, index) => (
-                    <li key={index} className="flex items-start">
-                      <span className="inline-flex items-center justify-center w-5 h-5 bg-blue-100 rounded-full mr-3 flex-shrink-0">
-                        <span className="w-1.5 h-1.5 bg-[#2774AE] rounded-full"></span>
-                      </span>
-                      <span className="text-gray-700">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                {/* Technology Tags */}
-                <div className="flex flex-wrap gap-2 mb-4 justify-center">
-                  {["Flask", "Python", "Bootstrap", "SQLAlchemy"].map(
-                    (tech, index) => (
-                      <span
-                        key={index}
-                        className="px-3 py-1 bg-blue-50 text-[#2774AE] rounded-full text-xs font-medium whitespace-nowrap"
-                      >
-                        {tech}
-                      </span>
-                    )
-                  )}
-                </div>
-
-                <Link
-                  href="https://github.com/alephnull07/Cartelligence"
-                  target="_blank"
-                  className="inline-flex items-center text-[#2774AE] hover:text-[#FFD100] font-medium text-sm md:text-base transition-colors duration-300"
-                >
-                  <span>View Project</span>
-                  <svg
-                    className="ml-1.5 md:ml-2 w-4 h-4 md:w-5 md:h-5 transform group-hover:translate-x-1 transition-transform duration-300"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 7l5 5m0 0l-5 5m5-5H6"
-                    />
-                  </svg>
-                </Link>
-              </div>
-
-              {/* Project Image Area */}
-              <div className="w-full md:w-2/5 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center p-2">
-                <Image
-                  src="/images/cartelligence_screenshot.png"
-                  alt="Cartelligence app screenshot"
-                  width={700}
-                  height={394}
-                  className="w-full h-auto object-contain"
-                  quality={100}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="card-hover group p-6 md:p-8 bg-white border border-gray-50 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300">
-            <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-center">
-              {/* Project Content */}
-              <div className="flex flex-col flex-1 justify-center items-center text-center">
-                <h3 className="text-2xl font-semibold text-gray-900 group-hover:text-[#2774AE] transition-colors duration-300">
-                  ClassTime
-                </h3>
-                <p className="text-gray-600 mt-3 mb-4 max-w-md">
-                  As a simple time-tracking app geared towards students, this
-                  mobile app is designed to bolster productivity by providing a
-                  comprehensive suite of tools for managing important
-                  assignments and various deadlines.
-                </p>
-
-                {/* Technology Tags */}
-                <div className="flex flex-wrap gap-2 mb-4 justify-center">
-                  {["Flutter", "Dart", "C++", "Firebase"].map((tech, index) => (
-                    <span
-                      key={index}
-                      className="px-3 py-1 bg-blue-50 text-[#2774AE] rounded-full text-xs font-medium whitespace-nowrap"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-
-                <Link
-                  href="https://github.com/Ethjin8/ClassTime"
-                  target="_blank"
-                  className="inline-flex items-center text-[#2774AE] hover:text-[#FFD100] font-medium transition-colors duration-300"
-                >
-                  <span>View Project</span>
-                  <svg
-                    className="ml-2 w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 7l5 5m0 0l-5 5m5-5H6"
-                    />
-                  </svg>
-                </Link>
-              </div>
-
-              {/* Project Image Area */}
-              <div className="w-full md:w-2/5 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center p-4">
-                <Image
-                  src="/images/classtime_screenshot.png"
-                  alt="ClassTime app screenshot"
-                  width={600}
-                  height={338}
-                  className="w-3/4 h-auto object-contain"
-                  quality={95}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Copyright Footer */}
-      <footer className="mt-12 md:mt-16 pb-6 md:pb-8">
-        <div className="text-center text-gray-500 text-xs md:text-sm">
-          © 2025 Ethan Jin. All Rights Reserved.
-        </div>
-      </footer>
+      </div>
     </div>
   );
 }
