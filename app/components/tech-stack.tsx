@@ -34,7 +34,7 @@ const techStack: TechItem[] = [
   { name: "C++", icon: SiCplusplus, color: "#00599C" },
   { name: "React", icon: SiReact, color: "#61DAFB" },
   { name: "Node.js", icon: SiNodedotjs, color: "#339933" },
-  { name: "Express.js", icon: SiExpress, color: "#1C1C1E" },
+  { name: "Express.js", icon: SiExpress, color: "var(--text-primary)" },
   { name: "PostgreSQL", icon: SiPostgresql, color: "#4169E1" },
   { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
   { name: "Docker", icon: SiDocker, color: "#2496ED" },

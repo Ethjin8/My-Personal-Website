@@ -48,14 +48,14 @@ export default function CurrentlyInto() {
   };
 
   return (
-    <div className="neu-raised rounded-3xl px-5 pt-3 pb-2 w-full min-[1440px]:w-[300px]">
+    <div className="neu-raised rounded-3xl px-5 pt-3 pb-2 w-full h-full min-[1440px]:w-[300px] flex flex-col">
       <h3
         className="text-xs font-display font-bold tracking-[0.2em] uppercase mb-1 text-center"
         style={{ color: "var(--ucla-blue)" }}
       >
         Currently Into…
       </h3>
-      <div className="relative h-[140px] flex items-center justify-center">
+      <div className="relative min-h-[140px] flex-1 flex items-center justify-center">
         {interests.map((item, i) => {
           const pos = getPosition(i);
           return (

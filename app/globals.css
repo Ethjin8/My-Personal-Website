@@ -44,6 +44,7 @@ html, body {
   background-attachment: fixed;
   color: var(--text-primary);
   font-family: var(--font-body), system-ui, sans-serif;
+  overflow-x: hidden;
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
 }
@@ -239,8 +240,15 @@ body::-webkit-scrollbar {
 }
 
 @media (max-width: 1439px) {
-  .mobile-reveal {
+  .adaptive-reveal {
     visibility: hidden;
     opacity: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .adaptive-reveal {
+    width: calc(100vw - 2rem);
+    max-width: calc(100vw - 2rem);
   }
 }

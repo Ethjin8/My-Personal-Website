@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useLayoutEffect } from "react";
+import { useRef, useState, useLayoutEffect, type CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FaLinkedinIn, FaGithub } from "react-icons/fa";
@@ -102,7 +102,6 @@ export default function HomePage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const bioDesktopRef = useRef<HTMLDivElement>(null);
-  const bioMobileRef = useRef<HTMLDivElement>(null);
   const intoRef = useRef<HTMLDivElement>(null);
   const buildingRef = useRef<HTMLDivElement>(null);
   const [twMinHeight, setTwMinHeight] = useState<number | undefined>(undefined);
@@ -133,7 +132,7 @@ export default function HomePage() {
   useGSAP(
     () => {
       // Bio card SplitText reveal — runs on mount
-      [bioDesktopRef.current, bioMobileRef.current].forEach((bio) => {
+      [bioDesktopRef.current].forEach((bio) => {
         if (!bio) return;
         bio.classList.remove("bio-text-hidden");
         const paragraphs = bio.querySelectorAll("p");
@@ -158,10 +157,10 @@ export default function HomePage() {
       const mm = gsap.matchMedia();
 
       mm.add("(max-width: 1439px)", () => {
-        const mobileCards = gsap.utils.toArray<HTMLElement>(".mobile-reveal");
-        gsap.set(mobileCards, { autoAlpha: 0, y: 30 });
+        const adaptiveCards = gsap.utils.toArray<HTMLElement>(".adaptive-reveal");
+        gsap.set(adaptiveCards, { autoAlpha: 0, y: 28 });
 
-        mobileCards.forEach((card) => {
+        adaptiveCards.forEach((card) => {
           gsap.to(card, {
             autoAlpha: 1,
             y: 0,
@@ -251,44 +250,64 @@ export default function HomePage() {
 
   return (
     <div ref={containerRef}>
-      {/* ===== MOBILE LAYOUT ===== */}
-      <div className="min-[1440px]:hidden flex flex-col items-center gap-5 px-3 pt-24 pb-16">
-        <Heading className="text-center" />
+      {/* ===== ADAPTIVE LAYOUT ===== */}
+      <div className="min-[1440px]:hidden px-4 sm:px-6 pt-24 pb-16">
+        <div className="mx-auto flex w-full max-w-[980px] min-w-0 flex-col items-center gap-6">
+          <Heading className="text-center" />
 
-        <ProfilePicture className="relative" />
+          <ProfilePicture className="relative" />
 
-        <div ref={bioMobileRef} className="mobile-reveal bio-text-hidden neu-raised rounded-3xl p-5 w-full">
-          <BioContent />
-        </div>
+          <div className="grid w-full min-w-0 grid-cols-1 justify-items-stretch gap-5 min-[900px]:grid-cols-2 min-[900px]:items-stretch">
+            <div
+              className="adaptive-reveal neu-raised min-w-0 rounded-3xl p-5 sm:p-6"
+            >
+              <BioContent />
+            </div>
 
-        <div className="mobile-reveal neu-raised rounded-3xl p-5 w-full">
-          <Typewriter />
-        </div>
+            <div className="adaptive-reveal neu-raised min-w-0 rounded-3xl p-5 sm:p-6 flex min-h-[150px] items-center justify-center">
+              <Typewriter />
+            </div>
 
-        <div className="mobile-reveal w-full">
-          <CurrentlyInto />
-        </div>
+            <div className="adaptive-reveal min-w-0">
+              <CurrentlyInto />
+            </div>
 
-        <div className="mobile-reveal w-full">
-          <TechStack />
-        </div>
+            <div className="adaptive-reveal min-w-0">
+              <CurrentlyBuilding />
+            </div>
 
-        <div className="mobile-reveal w-full">
-          <CurrentlyBuilding />
-        </div>
+            <div className="adaptive-reveal min-w-0 min-[900px]:col-span-2">
+              <TechStack />
+            </div>
 
-        <div className="mobile-reveal w-full overflow-x-auto">
-          <GitHubGraph />
-        </div>
+            <div className="adaptive-reveal min-w-0 min-h-[170px] min-[900px]:col-span-2">
+              <GitHubGraph />
+            </div>
 
-        <div className="mobile-reveal w-full">
-          <CurrentlyLearning />
+            <div className="adaptive-reveal min-w-0 min-h-[170px] min-[900px]:col-span-2">
+              <CurrentlyLearning />
+            </div>
+
+          </div>
         </div>
       </div>
 
       {/* ===== DESKTOP LAYOUT ===== */}
       <div className="hidden min-[1440px]:block relative" style={{ height: "300vh" }}>
-        <div ref={heroRef} className="h-screen w-full relative overflow-hidden">
+        <div
+          ref={heroRef}
+          className="h-screen w-full relative overflow-hidden"
+          style={
+            {
+              "--side-gap": "clamp(150px, 13.2vw, 190px)",
+              "--outer-gap": "clamp(450px, 36vw, 530px)",
+              "--building-width": "clamp(460px, 36vw, 520px)",
+              "--github-left": "clamp(430px, 34vw, 490px)",
+              "--learning-x": "clamp(190px, 16vw, 230px)",
+              "--learning-width": "clamp(420px, 33vw, 480px)",
+            } as CSSProperties
+          }
+        >
           {/* Profile picture — true center */}
           <ProfilePicture desktop className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10" />
 
@@ -296,13 +315,13 @@ export default function HomePage() {
           <Heading className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[calc(100%+185px)] text-center z-10" />
 
           {/* Bio card — left of profile */}
-          <div ref={bioDesktopRef} className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-[calc(100%+190px)] bio-text-hidden neu-raised rounded-3xl p-6 w-[300px] z-10">
+          <div ref={bioDesktopRef} className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-[calc(100%+var(--side-gap))] bio-text-hidden neu-raised rounded-3xl p-6 w-[300px] z-10">
             <BioContent />
           </div>
 
           {/* Typewriter + Color toggle row — right of profile */}
           <div
-            className="absolute top-1/2 left-1/2 -translate-y-1/2 translate-x-[190px] flex items-stretch gap-5 z-10"
+            className="absolute top-1/2 left-1/2 -translate-y-1/2 translate-x-[var(--side-gap)] flex items-stretch gap-5 z-10"
             style={twMinHeight ? { minHeight: twMinHeight } : undefined}
           >
             <div className="neu-raised rounded-3xl p-6 w-[300px] flex items-center justify-center">
@@ -335,14 +354,14 @@ export default function HomePage() {
           </div>
 
           {/* === BENTO CARDS === */}
-          <div ref={intoRef} className="absolute top-6 left-1/2 -translate-x-[calc(100%+190px)]">
+          <div ref={intoRef} className="absolute top-6 left-1/2 -translate-x-[calc(100%+var(--side-gap))]">
             <div className="bento-reveal" data-card="currently-into">
               <CurrentlyInto />
             </div>
           </div>
 
           <div
-            className="absolute top-6 left-1/2 -translate-x-[calc(100%+530px)]"
+            className="absolute top-6 left-1/2 -translate-x-[calc(100%+var(--outer-gap))]"
             style={{ height: "calc(50vh + 295px)" }}
           >
             <div className="bento-reveal h-full" data-card="tech-stack">
@@ -350,7 +369,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div ref={buildingRef} className="absolute top-6 left-1/2 translate-x-[190px] w-[520px]">
+          <div ref={buildingRef} className="absolute top-6 left-1/2 translate-x-[var(--side-gap)] w-[var(--building-width)]">
             <div className="bento-reveal" data-card="currently-building">
               <CurrentlyBuilding />
             </div>
@@ -358,7 +377,7 @@ export default function HomePage() {
 
           <div
             className="absolute top-1/2 left-1/2 w-[700px] h-[139px]"
-            style={{ transform: "translateX(-490px) translateY(180px)" }}
+            style={{ transform: "translateX(calc(-1 * var(--github-left))) translateY(180px)" }}
           >
             <div className="bento-reveal w-full h-full" data-card="github-graph">
               <GitHubGraph />
@@ -366,8 +385,8 @@ export default function HomePage() {
           </div>
 
           <div
-            className="absolute top-1/2 left-1/2 w-[480px] h-[203px]"
-            style={{ transform: "translateX(230px) translateY(116px)" }}
+            className="absolute top-1/2 left-1/2 w-[var(--learning-width)] h-[203px]"
+            style={{ transform: "translateX(var(--learning-x)) translateY(116px)" }}
           >
             <div className="bento-reveal w-full h-full" data-card="currently-learning">
               <CurrentlyLearning />
